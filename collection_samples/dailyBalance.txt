@@ -1,0 +1,51 @@
+dailyBalance
+    datetime:
+    prodBread:
+    transactions:
+        boughtProd:                 -alınanların collection'ı
+            prodTx:
+                product:
+                    productName:
+                    price:
+                    category:
+                amount:
+                owner:              --ürünü alan kişi
+                payloadType:        --ödeme türü
+        soldProd:
+             prodTx:
+                product:
+                    productName:
+                    price:
+                    category:
+                amount:
+                owner:              --ürünü satan kişi
+                payloadType:        --ödeme türü
+                sale:               --indirim
+        veresiye:
+            veresiyeTx:
+                product:
+                    productName:
+                    price:         
+                    category:
+                amount:
+                owner:              --veresiye veren kişi
+                buyer:              --veresiye yazdıran kişi
+        borcKapama:
+            kapamaTx:               --kapama işlemi transaction'ı
+                buyer:              -- veresiye kapatan
+                paid:               -- kapatılan tutar
+        notes:
+            note:
+                writer:
+                content:
+    breadDist:
+        companyTx:
+            pricePerBread:
+            received:           -- company den alınan para /*received miktarı az olursa market e bborç yazılır*/
+            name:
+            stale:              -- bayat ekmek
+            services:
+                s1:                 -- servis 1
+                    amount:         -- serviste dağıtılan ekmek
+                ...
+                sn:                 -- servis n

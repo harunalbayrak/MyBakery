@@ -1,0 +1,25 @@
+bakerylist:
+    bakery:
+        bakeryid:
+        day:
+            balance:
+        workers:
+            worker:
+                name:
+                role:
+                password:
+                username:
+        marketList:
+            market:
+                name:
+                pricePerBread:
+                balance:
+                services:
+                    s1:
+                        amount:         --ekmek sayısı
+                    ...
+                    sn:
+    veresiyeAlanlar:
+        buyer:
+            name:
+            

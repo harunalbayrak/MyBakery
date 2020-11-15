@@ -1,0 +1,7 @@
+productList:
+    product:
+        name:
+        category:
+        media:
+        price:
+        
