@@ -19,4 +19,4 @@ jobs:
         uses: crush-pics/crush-pics-github-action@master
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          api-key: ${{ secrets.CRUSH_API_KEY }}
+          api-key: ${{ secrets.eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InZlbmRldHRhbHRpbnRhczFAZ21haWwuY29tIiwiZW1haWwiOm51bGwsInBsYW4iOiJmcmVlIiwidG9rZW5fY3JlYXRlZF9hdCI6MTYwODk4OTgwOSwicXVvdGEiOnsidG90YWxfYnl0ZXMiOjI1MDAwMDAwLCJ1c2VkX2J5dGVzIjowfX0.5LKL65lw7r93bISbpfWqn4gsQRXRcLL-KreeLMaNHaAeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InZlbmRldHRhbHRpbnRhczFAZ21haWwuY29tIiwiZW1haWwiOm51bGwsInBsYW4iOiJmcmVlIiwidG9rZW5fY3JlYXRlZF9hdCI6MTYwODk4OTgwOSwicXVvdGEiOnsidG90YWxfYnl0ZXMiOjI1MDAwMDAwLCJ1c2VkX2J5dGVzIjowfX0.5LKL65lw7r93bISbpfWqn4gsQRXRcLL-KreeLMaNHaA }}
