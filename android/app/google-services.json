@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "327121545058",
+    "firebase_url": "https://mybakery-3434c.firebaseio.com",
+    "project_id": "mybakery-3434c",
+    "storage_bucket": "mybakery-3434c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327121545058:android:a183c060a8ef55b38fee3b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_my_bakery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327121545058-equ5o5nnu7ito8k0kh80d1hg0vstc2qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUsPixBMgyWgPI9V5NHM9r79DHv-_iSF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327121545058-equ5o5nnu7ito8k0kh80d1hg0vstc2qk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
