@@ -17,10 +17,11 @@ class ProductsIn extends StatefulWidget {
 }
 
 class _ProductsInState extends State<ProductsIn> {
-  DatabaseService service = DatabaseService();
+  DatabaseService service = DatabaseService('bakery');
 
   @override
   Widget build(BuildContext context) {
+    int flag=0;
     final contextW = MediaQuery.of(context).size.width;
     final contextH = MediaQuery.of(context).size.height;
 
@@ -32,23 +33,36 @@ class _ProductsInState extends State<ProductsIn> {
     TextEditingController controller = TextEditingController();
     TextEditingController controller2 = TextEditingController();
 
-    return StreamBuilder<Event>(
+    return flag==1 ? Scaffold(
+        appBar: AppBar(
+          title: Text(widget.category.toString(),style: TextStyle(fontFamily: "Poppins"),),
+          centerTitle: true,
+          backgroundColor: Colors.blueGrey,
+        ),
+      body: Container(),
+    )
+        : StreamBuilder<Event>(
       stream: service.categoryReference.child(widget.category).onValue,
       builder: (context,snapshot){
         Map data = {};
         List item = [];
         if(snapshot.hasData) {
           data = snapshot.data.snapshot.value;
-          if(data == null){
+
+          print(data.length);
+          print(data.values.first);
+          print(widget.category.toString());
+
+          if(data == null || (data.length == 1 && data.values.first.toString() == widget.category.toString())) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Employees",style: TextStyle(fontFamily: "Poppins"),),
+                title: Text(widget.category.toString(),style: TextStyle(fontFamily: "Poppins"),),
                 centerTitle: true,
                 backgroundColor: Colors.blueGrey,
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: (){
-                  //confirmationPopup(context,image,0,0,controller);
+                  confirmationPopup(context,image,0,0,"",controller,controller2);
                 },
                 child: Icon(Icons.add),
               ),

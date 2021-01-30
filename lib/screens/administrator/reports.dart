@@ -31,6 +31,7 @@ class _ReportsState extends State<Reports> {
     DateTime maxTime = DateTime.now();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Reports",style: TextStyle(fontFamily: "Poppins"),),
         centerTitle: true,

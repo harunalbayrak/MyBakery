@@ -1,69 +1,98 @@
 import 'dart:developer';
-
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_my_bakery/screens/service/service_models/urun_model.dart';
+import 'package:flutter_my_bakery/screens/service/service_models/date_data.dart';
+import 'package:flutter_my_bakery/screens/service/service_models/market_model.dart';
 import 'package:flutter_my_bakery/shared/constants.dart';
 
 class ServiceDetails extends StatefulWidget {
-  final String servicename;
-  ServiceDetails({Key key, this.servicename}) : super(key: key);
+  final int id;
+  final Market market;
+  ServiceDetails({Key key, this.id, this.market}) : super(key: key);
 
   @override
   _ServiceDetailsState createState() => _ServiceDetailsState();
 }
 
 class _ServiceDetailsState extends State<ServiceDetails> {
-  List<Urun> urunList = [
-    Urun(name: 'pogaca', price: 1),
-    Urun(name: 'easaffaffjalafjkkjafaf', price: 1)
-  ];
-  Map<String, int> mainList = {};
+  Map products;
+  Query _ref;
+  var serviceRef;
+
   @override
   void initState() {
     super.initState();
-    urunList.forEach((element) {
-      mainList.putIfAbsent(element.name, () => 0);
-    });
-    mainList.forEach((key, value) {
-      value = 0;
-    });
+    serviceRef = widget.market.marketReference
+        .child('dailyData')
+        .child(DateData.date)
+        .child('service-' + widget.id.toString());
+    _ref = serviceRef.orderByChild('name');
+
+    loadData().whenComplete(() => {
+          products.forEach((key, value) async {
+            bool check =
+                await rootFirebaseIsExists(serviceRef.child(value['name']));
+            if (check) {
+              serviceRef.child(value['name']).updateByKey(
+                  {'name': value['name'], 'price': value['price']});
+            } else {
+              serviceRef
+                  .child(value['name'])
+                  .set({'name': value['name'], 'price': value['price']});
+            }
+          })
+        });
+  }
+
+  Future<bool> rootFirebaseIsExists(DatabaseReference databaseReference) async {
+    DataSnapshot snapshot = await databaseReference.once();
+
+    return snapshot != null;
+  }
+
+  Future<void> loadData() async {
+    DataSnapshot snapshot =
+        await widget.market.marketReference.child('products').once();
+
+    products = snapshot.value;
   }
 
   void add(String name, int amount) {
     setState(() {
-      mainList.update(name, (value) => value + amount);
+      serviceRef.child(name).updateByKey({'amount': amount.toString()});
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    log('test4');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
-        title: new Text(widget.servicename),
+        title: new Text(widget.id.toString()),
       ),
-      body: ListView.builder(
-        itemCount: urunList.length,
-        itemBuilder: (context, index) {
+      body: FirebaseAnimatedList(
+        query: _ref,
+        itemBuilder: (BuildContext context, DataSnapshot snapshot,
+            Animation<double> animation, int index) {
+          Map product = snapshot.value;
+
           return Card(
               child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(urunList[index].name.length > 6
-                      ? urunList[index].name.substring(0, 4) + '...'
-                      : urunList[index].name),
+                  Text(product['name']),
                   Text(
-                    mainList[urunList[index].name].toString(),
+                    product['amount'] != null ? product['amount'] : '0',
                     textAlign: TextAlign.center,
                   ),
                   IconButton(
                       icon: Icon(Icons.add),
-                      onPressed: () => {
-                            _displayTextInputDialog(
-                                context, urunList[index].name)
-                          })
+                      onPressed: () =>
+                          {_displayTextInputDialog(context, product)})
                 ]),
           ));
         },
@@ -72,7 +101,8 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   }
 
   Future<void> _displayTextInputDialog(
-      BuildContext context, String name) async {
+      BuildContext context, Map product) async {
+    log(product.toString());
     TextEditingController _textFieldController = new TextEditingController();
     final _formKey = GlobalKey<FormState>();
     return showDialog(
@@ -110,8 +140,17 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
 
-                      add(name, int.parse(_textFieldController.text));
-
+                      add(
+                          product['name'],
+                          int.parse(_textFieldController.text) +
+                              (product['amount'] != null
+                                  ? int.parse(product['amount'])
+                                  : 0));
+                      log('burada 1');
+                      widget.market.addDebt(
+                          double.parse(_textFieldController.text) *
+                              product['price']);
+                      log('burada');
                       _textFieldController.clear();
                       Navigator.pop(context); // Close the add todo screen
                     }

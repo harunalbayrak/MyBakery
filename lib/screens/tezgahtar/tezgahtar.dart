@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/odeme.dart';
+import 'package:flutter_my_bakery/services/auth.dart';
 import 'package:flutter_my_bakery/shared/loading.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/note.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/expense.dart';
@@ -13,6 +14,7 @@ class Tezgahtar extends StatefulWidget {
 }
 
 class _TezgahtarState extends State<Tezgahtar> {
+  final AuthService _auth = AuthService();
   bool loading = false;
 
   int seciliSayfa = 0;
@@ -34,6 +36,28 @@ class _TezgahtarState extends State<Tezgahtar> {
               ),
               centerTitle: true,
               backgroundColor: Colors.blueGrey,
+              actions: <Widget>[
+                FlatButton.icon(
+                  icon: Icon(
+                    Icons.exit_to_app,
+                    color: Colors.blueGrey[100],
+                  ),
+                  label: Text(
+                    "Exit",
+                    style: TextStyle(
+                        color: Colors.blueGrey[100], fontFamily: "Poppins"),
+                  ),
+                  onPressed: () async {
+                    setState(() => loading = true);
+                    dynamic result = await _auth.signOut();
+                    if (result == null) {
+                      setState(() {
+                        loading = false;
+                      });
+                    }
+                  },
+                )
+              ],
             ),
             body: SafeArea(
               child: Container(

@@ -15,18 +15,20 @@ List piece = List();
 class OdemeKategori extends StatefulWidget {
   String category;
 
-  OdemeKategori ({ Key key, this.category }): super(key: key);
+  OdemeKategori({Key key, this.category}) : super(key: key);
 
   @override
   _OdemeKategoriState createState() => _OdemeKategoriState();
 }
 
 class _OdemeKategoriState extends State<OdemeKategori> {
-  DatabaseService service = DatabaseService();
+  DatabaseService service = DatabaseService('bakery');
 
-  int sumPrice(){
-    int sum = 0;
-    for(int i=0;i<price.length;++i){
+  double sumPrice() {
+    print("wewewewewewewewewe:");
+    if (price.length == 0) return 0.0;
+    double sum = 0;
+    for (int i = 0; i < price.length; ++i) {
       sum += price[i] * piece[i];
     }
     return sum;
@@ -48,93 +50,113 @@ class _OdemeKategoriState extends State<OdemeKategori> {
 
     return StreamBuilder<Event>(
       stream: service.categoryReference.child(widget.category).onValue,
-      builder: (context,snapshot){
+      builder: (context, snapshot) {
         Map data = {};
         List item = [];
-        if(snapshot.hasData) {
+        if (snapshot.hasData) {
           data = snapshot.data.snapshot.value;
-          if(data == null){
+          if (data == null) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Employees",style: TextStyle(fontFamily: "Poppins"),),
+                title: Text(
+                  "Employees",
+                  style: TextStyle(fontFamily: "Poppins"),
+                ),
                 centerTitle: true,
                 backgroundColor: Colors.blueGrey,
               ),
               floatingActionButton: FloatingActionButton(
-                onPressed: (){
+                onPressed: () {
                   //confirmationPopup(context,image,0,0,controller);
                 },
                 child: Icon(Icons.add),
               ),
             );
           }
-          data.forEach(
-                  (index, data) => item.add({"key": index, ...data}));
+          data.forEach((index, data) => item.add({"key": index, ...data}));
         }
 
-        if (snapshot.hasError)
-          return new Text('Error: ${snapshot.error}');
-        switch (snapshot.connectionState){
+        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return  Container(
+            return Container(
               height: 200.0,
               alignment: Alignment.center,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black45),
               ),
             );
-          default: return Scaffold(
-            appBar: AppBar(
-              title: Text(widget.category.toString(),style: TextStyle(fontFamily: "Poppins"),),
-              centerTitle: true,
-              backgroundColor: Colors.blueGrey,
-            ),
-            body: ListView.builder(
-              itemCount: item.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    confirmationPopup(context,image,index,controller,item);
-                  },
-                  leading: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: sizeW,
-                      minHeight: sizeH,
-                      maxWidth: sizeW + 20,
-                      maxHeight: sizeH + 20,
+          default:
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  widget.category.toString(),
+                  style: TextStyle(fontFamily: "Poppins"),
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.blueGrey,
+              ),
+              body: ListView.builder(
+                itemCount: item.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () {
+                      confirmationPopup(
+                          context, image, index, controller, item);
+                    },
+                    leading: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: sizeW,
+                        minHeight: sizeH,
+                        maxWidth: sizeW + 20,
+                        maxHeight: sizeH + 20,
+                      ),
+                      child: image,
                     ),
-                    child: image,
-                  ),
-                  title: Text(item[index]["name"],style: TextStyle(fontFamily: "Poppins"),),
-                  trailing: Text(item[index]["price"].toString() + " ₺",style: TextStyle(fontFamily: "Poppins",fontSize: 20),),
-                );
-              },
+                    title: Text(
+                      item[index]["name"],
+                      style: TextStyle(fontFamily: "Poppins"),
+                    ),
+                    trailing: Text(
+                      item[index]["price"].toString() + " ₺",
+                      style: TextStyle(fontFamily: "Poppins", fontSize: 20),
+                    ),
+                  );
+                },
+              ),
+              floatingActionButton: FloatingActionButton.extended(
+                onPressed: () {
+                  controller2.text = sumPrice().toString();
+                  controller3.text = indirim.toString();
 
-            ),
-            floatingActionButton: FloatingActionButton.extended(
-              onPressed: (){
-                controller2.text = sumPrice().toString();
-                controller3.text = indirim.toString();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Sepet(
+                              product: product,
+                              piece: piece,
+                              price: price,
+                            )),
+                  ).then((_) {
+                    setState(() {});
+                  }); // sepetten geri donunce guncellmesi icin
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Sepet(product: product,piece: piece,price: price,)),
-                ).then((_) {
-                  setState((){});
-                });// sepetten geri donunce guncellmesi icin
-
-                // confirmationPopup2(context,image,controller2,controller3);
-              },
-              icon: Icon(Icons.shopping_cart_outlined),
-              label: Text(sumPrice().toString() + " ₺",style: TextStyle(fontFamily: "Poppins",fontSize: 20),),
-            ),
-          );
+                  // confirmationPopup2(context,image,controller2,controller3);
+                },
+                icon: Icon(Icons.shopping_cart_outlined),
+                label: Text(
+                  sumPrice().toString() + " ₺",
+                  style: TextStyle(fontFamily: "Poppins", fontSize: 20),
+                ),
+              ),
+            );
         }
       },
     );
   }
 
-  confirmationPopup(BuildContext dialogContext,Widget image,int index,TextEditingController controller,List item) {
+  confirmationPopup(BuildContext dialogContext, Widget image, int index,
+      TextEditingController controller, List item) {
     final contextW = MediaQuery.of(context).size.width;
     final sizeW = contextW / 20;
 
@@ -142,7 +164,8 @@ class _OdemeKategoriState extends State<OdemeKategori> {
       animationType: AnimationType.grow,
       overlayColor: Colors.black87,
       isOverlayTapDismiss: true,
-      titleStyle: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold, fontSize: sizeW),
+      titleStyle: TextStyle(
+          fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: sizeW),
       animationDuration: Duration(milliseconds: 400),
     );
 
@@ -152,9 +175,13 @@ class _OdemeKategoriState extends State<OdemeKategori> {
         title: "Adet gir",
         content: Column(
           children: [
-            SizedBox(height: sizeW,),
+            SizedBox(
+              height: sizeW,
+            ),
             image,
-            SizedBox(height: sizeW,),
+            SizedBox(
+              height: sizeW,
+            ),
             TextFormField(
               controller: controller,
               keyboardType: TextInputType.number,
@@ -190,7 +217,7 @@ class _OdemeKategoriState extends State<OdemeKategori> {
             ),
             onPressed: () {
               setState(() {
-                if (int.parse(controller.value.text) > 0 ) {
+                if (int.parse(controller.value.text) > 0) {
                   product.add(item[index]["name"]);
                   price.add(item[index]["price"]);
                   piece.add(int.parse(controller.value.text));
@@ -203,5 +230,3 @@ class _OdemeKategoriState extends State<OdemeKategori> {
         ]).show();
   }
 }
-
-

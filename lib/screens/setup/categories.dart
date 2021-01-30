@@ -17,12 +17,15 @@ const categories = const [
 
 class Categories extends StatelessWidget {
   final List<Worker> workerList = [];
+  final String bakeryName;
+
+  Categories({this.bakeryName});
 
   void nextPage(BuildContext cx) {
     Navigator.of(cx).push(
       MaterialPageRoute(
         builder: (_) {
-          return Workers(list: workerList);
+          return Workers(list: workerList, bakeryName: bakeryName);
         },
       ),
     );
@@ -40,7 +43,8 @@ class Categories extends StatelessWidget {
               mainAxisSpacing: 20,
               childAspectRatio: 1.4),
           children: categories
-              .map((catData) => CategoryItem(catData.name, catData.image))
+              .map((catData) =>
+                  CategoryItem(catData.name, catData.image, bakeryName))
               .toList(),
         ),
       ),

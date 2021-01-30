@@ -8,16 +8,13 @@ import 'package:flutter_my_bakery/screens/administrator/products_in.dart';
 
 String uid;
 
-List images = ['ekmekler.jpeg','kahvaltiliklar.jpeg','pastalar.jpeg','icecekler.jpeg',
-  'tatlilar.jpeg','kurabiyeler.jpeg','hazirGidalar.jpeg','diger.jpeg','diger.jpeg','diger.jpeg','diger.jpeg','diger.jpeg'];
-
 class Products extends StatefulWidget {
   @override
   _ProductsState createState() => _ProductsState();
 }
 
 class _ProductsState extends State<Products> {
-  DatabaseService service = DatabaseService();
+  DatabaseService service = DatabaseService('bakery');
 
   @override
   void initState() {
@@ -85,15 +82,19 @@ class _ProductsState extends State<Products> {
                 return ListTile(
                   onLongPress: (){
                     controller.text = item[index]["name"];
-                    image = Image(image: AssetImage('assets/images/' + images[index]));
                     uid = item[index]["name"];
                     confirmationPopup(context,image,1,index,"",controller);
                   },
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProductsIn(category: item[index]["key"])),
-                    );
+                    try{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProductsIn(category: item[index]["key"])),
+                      );
+                    } on Exception catch (_){
+                      print("asd");
+                    }
+
                   },
                   leading: ConstrainedBox(
                     constraints: BoxConstraints(
@@ -102,7 +103,7 @@ class _ProductsState extends State<Products> {
                       maxWidth: sizeW + 20,
                       maxHeight: sizeH + 20,
                     ),
-                    child: Image(image: AssetImage('assets/images/' + images[index])),
+                    child: Icon(Icons.category),
                   ),
                   title: Text(item[index]["key"],style: TextStyle(fontFamily: "Poppins"),),
                 );
@@ -147,7 +148,7 @@ class _ProductsState extends State<Products> {
                 maxWidth: 100,
                 maxHeight: 150,
               ),
-              child: Image(image: AssetImage('assets/images/' + images[index]))
+              child: Icon(Icons.category,size: 70,),
             ),
             SizedBox(height: sizeW,),
             TextFormField(

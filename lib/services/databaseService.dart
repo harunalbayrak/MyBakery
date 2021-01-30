@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_my_bakery/models/Category.dart';
 import 'package:flutter_my_bakery/models/Market.dart';
@@ -9,18 +10,51 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
 class DatabaseService {
-  final marketsReference =
-      FirebaseDatabase.instance.reference().child('bakery').child('markets');
-  final workersReference =
-      FirebaseDatabase.instance.reference().child('bakery').child('employees');
-  final payersReference = FirebaseDatabase.instance
-      .reference()
-      .child('bakery')
-      .child('veresiyeler');
-  final categoryReference =
-      FirebaseDatabase.instance.reference().child('bakery').child('categories');
+  var bakeryRef;
+  var marketsReference;
+  var workersReference;
+  var payersReference;
+  var categoryReference;
+  var bakeryReference;
+  var dailyDataReference;
+  DatabaseService(String bakeryName) {
+    bakeryRef = FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child(bakeryName);
+    dailyDataReference = FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child(bakeryName)
+        .child('dailyData');
+    marketsReference = FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child(bakeryName)
+        .child('markets');
 
-  final AuthService auth = AuthService();
+    workersReference = FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child(bakeryName)
+        .child('employees');
+
+    payersReference = FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child(bakeryName)
+        .child('veresiyeler');
+
+    categoryReference = FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child(bakeryName)
+        .child('categories');
+
+    bakeryReference = FirebaseDatabase.instance.reference().child("bakeries");
+  }
+
+  static final AuthService auth = AuthService();
   String username = 'aloafofhappiness@gmail.com';
   String password = 'Aloafofhappiness+';
 
@@ -42,20 +76,33 @@ class DatabaseService {
       final smtpServer = gmail(username, password);
       Map map = snapshot.value;
       map.forEach((key, value) async {
-        auth.registerWithEmailAndPassword(value['mail'], value['passwd']);
-        final message = Message()
-          ..from = Address(username, 'a Loaf of Happiness')
-          ..recipients.add(value['mail'])
-          ..subject = 'Login'
-          ..html = "<p>My Bakery giriş şifreniz: ${value['passwd']}</p>";
+        var check = await auth.registerWithEmailAndPassword(
+            value['mail'], value['passwd']);
 
-        try {
-          final sendReport = await send(message, smtpServer);
-          print('Message sent: ' + sendReport.toString());
-        } on MailerException catch (e) {
-          print('Message not sent.');
-          for (var p in e.problems) {
-            print('Problem: ${p.code}: ${p.msg}');
+        print(check);
+
+        if (check != null) {
+          await Firestore.instance
+              .collection('users')
+              .document(check)
+              .setData({'userid': check, 'role': value['job']});
+        }
+
+        if (check != null) {
+          final message = Message()
+            ..from = Address(username, 'a Loaf of Happiness')
+            ..recipients.add(value['mail'])
+            ..subject = 'Login'
+            ..html = "<p>My Bakery giriş şifreniz: ${value['passwd']}</p>";
+
+          try {
+            final sendReport = await send(message, smtpServer);
+            print('Message sent: ' + sendReport.toString());
+          } on MailerException catch (e) {
+            print('Message not sent.');
+            for (var p in e.problems) {
+              print('Problem: ${p.code}: ${p.msg}');
+            }
           }
         }
       });

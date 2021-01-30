@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_my_bakery/screens/service/service_detail_screen.dart';
+import 'package:flutter_my_bakery/screens/service/service_models/market_model.dart';
 
 class ServiceCard extends StatefulWidget {
   final int index;
-  ServiceCard({Key key, String text, this.index}) : super(key: key);
+  final Market market;
+  ServiceCard({Key key, String text, this.index, this.market})
+      : super(key: key);
 
   @override
   _ServiceCardState createState() => _ServiceCardState();
@@ -16,8 +19,8 @@ class _ServiceCardState extends State<ServiceCard> {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ServiceDetails(
-                  servicename: "SERVICE-" + widget.index.toString()))),
+              builder: (context) =>
+                  ServiceDetails(market: widget.market, id: widget.index))),
       child: Card(
         elevation: 4,
         child: Container(

@@ -14,16 +14,16 @@ import 'package:flutter_my_bakery/services/crud.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/field_test.dart';
 
-class Veresiye extends StatefulWidget {
-  Veresiye({Key key, this.title}) : super(key: key);
+class Veresiye2 extends StatefulWidget {
+  Veresiye2({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _VeresiyeState createState() => _VeresiyeState();
+  _Veresiye2State createState() => _Veresiye2State();
 }
 
-class _VeresiyeState extends State<Veresiye> {
+class _Veresiye2State extends State<Veresiye2> {
   GlobalKey<FormState> _key = new GlobalKey();
   bool headerShouldHide = false;
   List<VeresiyeModel> veresiyeList = [];
@@ -165,89 +165,12 @@ class _VeresiyeState extends State<Veresiye> {
         ));
   }
 
-  veresiyePopup(BuildContext dialogContext, VeresiyeModel veresiye,
-      TextEditingController controller) {
-    final contextW = MediaQuery.of(context).size.width;
-    final sizeW = contextW / 20;
-
-    var alertStyle = AlertStyle(
-      animationType: AnimationType.grow,
-      overlayColor: Colors.black87,
-      isOverlayTapDismiss: true,
-      titleStyle: TextStyle(
-          fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: sizeW),
-      animationDuration: Duration(milliseconds: 400),
-    );
-
-    Alert(
-        context: dialogContext,
-        style: alertStyle,
-        title: veresiye.title,
-        content: Form(
-            key: _key,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: sizeW,
-                ),
-                SizedBox(
-                  height: sizeW,
-                ),
-                TextFormField(
-                  controller: controller,
-                  keyboardType: TextInputType.number,
-                  style: textStyle1,
-                  validator: fieldTest.veresiyeContentValidator,
-                ),
-              ],
-            )),
-        buttons: [
-          DialogButton(
-            child: Text(
-              "Çıkar",
-              style: TextStyle(color: Colors.white, fontSize: sizeW),
-            ),
-            onPressed: () {
-              if (_key.currentState.validate()) {
-                setState(() {
-                  if (double.parse(controller.value.text) > 0) {
-                    veresiye.content = ((double.parse(veresiye.content)) -
-                            (double.parse(controller.value.text)))
-                        .toString();
-                    service.updateVeresiye(veresiye.title, veresiye.toMap());
-                  }
-                });
-                Navigator.pop(context);
-                setVeresiyeFromDB();
-              }
-            },
-            color: Colors.red,
-          ),
-          DialogButton(
-            child: Text(
-              "Ekle",
-              style: TextStyle(color: Colors.white, fontSize: sizeW),
-            ),
-            onPressed: () {
-              if (_key.currentState.validate()) {
-                print("inside ekle");
-                setState(() {
-                  print("inside setstate");
-                  if (double.parse(controller.value.text) > 0) {
-                    veresiye.content = ((double.parse(veresiye.content)) +
-                            (double.parse(controller.value.text)))
-                        .toString();
-                    service.updateVeresiye(veresiye.title, veresiye.toMap());
-                    ;
-                  }
-                });
-                Navigator.pop(context);
-                setVeresiyeFromDB();
-              }
-            },
-            color: Colors.blue,
-          )
-        ]).show();
+  veresiyePopup(
+    BuildContext dialogContext, VeresiyeModel veresiye, double payment) {
+    veresiye.content = (double.parse(veresiye.content) + payment).toString();
+    service.updateVeresiye(veresiye.title, veresiye.toMap());
+    setVeresiyeFromDB();
+    Navigator.of(dialogContext).pop(); // xD
   }
 
   List<Widget> buildveresiyeComponentsList() {
@@ -263,7 +186,7 @@ class _VeresiyeState extends State<Veresiye> {
             note.content
                 .toLowerCase()
                 .contains(searchController.text.toLowerCase()))
-          veresiyeComponentsList.add(VeresiyeCardComponent(
+          veresiyeComponentsList.add(VeresiyeCardComponent2(
             veresiyeData: note,
             onTapAction: veresiyePopup,
           ));
@@ -271,10 +194,8 @@ class _VeresiyeState extends State<Veresiye> {
       return veresiyeComponentsList;
     } else {
       veresiyeList.forEach((note) {
-        veresiyeComponentsList.add(VeresiyeCardComponent(
-            veresiyeData: note,
-            onTapAction: veresiyePopup,
-            onlongPressAction: _showDialog));
+        veresiyeComponentsList.add(VeresiyeCardComponent2(
+            veresiyeData: note, onTapAction: veresiyePopup));
       });
     }
     return veresiyeComponentsList;

@@ -16,7 +16,7 @@ class Employees extends StatefulWidget {
 }
 
 class _EmployeesState extends State<Employees> {
-  DatabaseService service = DatabaseService();
+  DatabaseService service = DatabaseService('bakery');
 
   @override
   void initState() {

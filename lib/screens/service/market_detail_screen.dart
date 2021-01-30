@@ -1,87 +1,78 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_my_bakery/screens/service/info_card.dart';
+
+import 'package:flutter_my_bakery/screens/service/service_models/market_model.dart';
 import 'package:flutter_my_bakery/screens/service/widgets/service_card.dart';
 import 'package:flutter_my_bakery/screens/service/urunler_screen.dart';
 import 'package:flutter_my_bakery/shared/constants.dart';
-import 'package:intl/intl.dart';
 
 class MarketDetail extends StatefulWidget {
-  final String marketName;
+  final Market market;
 
-  MarketDetail({Key key, @required this.marketName}) : super(key: key);
+  MarketDetail({Key key, this.market}) : super(key: key);
 
   @override
   _MarketDetailState createState() => _MarketDetailState();
 }
 
 class _MarketDetailState extends State<MarketDetail> {
-  double borc = 0;
-  double odeme = 0;
-  int bayat = 0;
-
-  int ekmek = 0;
   @override
   Widget build(BuildContext context) {
-    DateFormat dateFormat = DateFormat("dd.MM.yyyy");
-
-    String currentTime = dateFormat.format(DateTime.now());
-
-    DateTime minTime = DateTime(2018, 12, 5);
-
-    DateTime maxTime = DateTime.now();
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.marketName),
+        title: Text(widget.market.name),
         centerTitle: true,
         backgroundColor: Colors.blueGrey,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: Container(
-                padding: EdgeInsets.all(6),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 - 20,
-                      child: Container(
-                        child: RaisedButton(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                currentTime,
-                                style: TextStyle(
-                                    fontFamily: "Poppins", color: Colors.white),
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_right,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                          color: Colors.amber,
-                          onPressed: () {
-                            DatePicker.showDatePicker(context,
-                                showTitleActions: true,
-                                minTime: minTime,
-                                maxTime: maxTime, onChanged: (date) {
-                              print('change $date');
-                            }, onConfirm: (date) {
-                              print('confirm $date');
-                            },
-                                currentTime: DateTime.now(),
-                                locale: LocaleType.tr);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Center(
+            //   child: Container(
+            //     padding: EdgeInsets.all(6),
+            //     child: Column(
+            //       children: [
+            //         SizedBox(
+            //           width: MediaQuery.of(context).size.width / 2 - 20,
+            //           child: Container(
+            //             child: RaisedButton(
+            //               child: Row(
+            //                 mainAxisSize: MainAxisSize.min,
+            //                 children: [
+            //                   Text(
+            //                     currentTime,
+            //                     style: TextStyle(
+            //                         fontFamily: "Poppins", color: Colors.white),
+            //                   ),
+            //                   Icon(
+            //                     Icons.keyboard_arrow_right,
+            //                     color: Colors.white,
+            //                   ),
+            //                 ],
+            //               ),
+            //               color: Colors.amber,
+            //               onPressed: () {
+            //                 DatePicker.showDatePicker(context,
+            //                     showTitleActions: true,
+            //                     minTime: minTime,
+            //                     maxTime: maxTime, onChanged: (date) {
+            //                   print('change $date');
+            //                 }, onConfirm: (date) {
+            //                   print('confirm $date');
+            //                 },
+            //                     currentTime: DateTime.now(),
+            //                     locale: LocaleType.tr);
+            //               },
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Column(
               children: [
                 Row(
@@ -92,7 +83,7 @@ class _MarketDetailState extends State<MarketDetail> {
                       height: MediaQuery.of(context).size.height * .2,
                       child: InfoCard(
                         label: "ÖDENEN",
-                        info: odeme.toString(),
+                        info: widget.market.taken.toString(),
                         fontSize: 24,
                         icon: Icon(Icons.attach_money),
                         onTap: () => newPage(context, "tutar"),
@@ -103,7 +94,7 @@ class _MarketDetailState extends State<MarketDetail> {
                       height: MediaQuery.of(context).size.height * .2,
                       child: InfoCard(
                         label: "EKMEK",
-                        info: ekmek.toString(),
+                        info: widget.market.delivered.toString(),
                         fontSize: 24,
                         icon: Icon(Icons.bakery_dining),
                         onTap: () => newPage(context, "ekmek"),
@@ -119,7 +110,7 @@ class _MarketDetailState extends State<MarketDetail> {
                       height: MediaQuery.of(context).size.height * .2,
                       child: InfoCard(
                         label: "BAYAT",
-                        info: bayat.toString(),
+                        info: widget.market.bayat.toString(),
                         fontSize: 24,
                         icon: Icon(Icons.assignment_return),
                         onTap: () => newPage(context, "bayat"),
@@ -142,12 +133,15 @@ class _MarketDetailState extends State<MarketDetail> {
             Column(
               children: [
                 ServiceCard(
+                  market: widget.market,
                   index: 1,
                 ),
                 ServiceCard(
+                  market: widget.market,
                   index: 2,
                 ),
                 ServiceCard(
+                  market: widget.market,
                   index: 3,
                 )
               ],
@@ -156,25 +150,6 @@ class _MarketDetailState extends State<MarketDetail> {
         ),
       ),
     );
-  }
-
-  void pay(double amount) {
-    setState(() {
-      borc -= amount;
-      odeme += amount;
-    });
-  }
-
-  void add_bayat(int amount) {
-    setState(() {
-      bayat += amount;
-    });
-  }
-
-  void add_ekmek(int amount) {
-    setState(() {
-      ekmek += amount;
-    });
   }
 
   Future<void> _displayTextInputDialog(BuildContext context, String op) async {
@@ -214,13 +189,16 @@ class _MarketDetailState extends State<MarketDetail> {
                       _formKey.currentState.save();
                       switch (op) {
                         case "ödeme":
-                          pay(double.parse(_textFieldController.text));
+                          widget.market
+                              .pay(double.parse(_textFieldController.text));
                           break;
                         case "bayat":
-                          add_bayat(int.parse(_textFieldController.text));
+                          widget.market
+                              .addBayat(int.parse(_textFieldController.text));
                           break;
                         case "ekmek":
-                          add_ekmek(int.parse(_textFieldController.text));
+                          widget.market
+                              .addEkmek(int.parse(_textFieldController.text));
                           break;
                         default:
                       }
@@ -239,7 +217,9 @@ class _MarketDetailState extends State<MarketDetail> {
     switch (page) {
       case "urunler":
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => UrunScreen()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => UrunScreen(market: widget.market)));
         break;
       case "tutar":
         _displayTextInputDialog(context, "ödeme");

@@ -5,18 +5,16 @@ import '../models/Product.dart';
 class CategoryItem extends StatelessWidget {
   final String name;
   final String image;
+  final String bakeryName;
   final List<Product> liste = [];
 
-  CategoryItem(this.name, this.image);
+  CategoryItem(this.name, this.image, this.bakeryName);
 
   void goProduct(BuildContext cx) {
     Navigator.of(cx).push(
       MaterialPageRoute(
         builder: (_) {
-          return Urunler(
-            category: name,
-            list: liste,
-          );
+          return Urunler(category: name, list: liste, bakeryName: bakeryName);
         },
       ),
     );
