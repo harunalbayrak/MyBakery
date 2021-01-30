@@ -77,8 +77,8 @@ class ServiceModel {
   Future<void> updateDb() async {
     final dayReference =
         DatabaseService('bakery').dailyDataReference.child(DateData.date);
-    DatabaseService('bakery').bakeryRef.set({'debt': debt.toString()});
-    dayReference.set({
+    DatabaseService('bakery').bakeryRef.update({'debt': debt.toString()});
+    dayReference.update({
       'delivered': delivered.toString(),
       'bayat': bayat.toString(),
       'taken': taken.toString()

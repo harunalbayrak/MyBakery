@@ -34,12 +34,13 @@ class _ServiceDetailsState extends State<ServiceDetails> {
             bool check =
                 await rootFirebaseIsExists(serviceRef.child(value['name']));
             if (check) {
-              serviceRef.child(value['name']).updateByKey(
-                  {'name': value['name'], 'price': value['price']});
+              serviceRef
+                  .child(value['name'])
+                  .update({'name': value['name'], 'price': value['price']});
             } else {
               serviceRef
                   .child(value['name'])
-                  .set({'name': value['name'], 'price': value['price']});
+                  .update({'name': value['name'], 'price': value['price']});
             }
           })
         });
@@ -58,9 +59,11 @@ class _ServiceDetailsState extends State<ServiceDetails> {
     products = snapshot.value;
   }
 
-  void add(String name, int amount) {
+  void add(String name, int amount, double price) {
     setState(() {
-      serviceRef.child(name).updateByKey({'amount': amount.toString()});
+      widget.market.addEkmek(amount);
+      serviceRef.child(name).update({'amount': amount.toString()});
+      widget.market.addDebt(amount * price);
     });
   }
 
@@ -145,11 +148,10 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                           int.parse(_textFieldController.text) +
                               (product['amount'] != null
                                   ? int.parse(product['amount'])
-                                  : 0));
+                                  : 0),
+                          product['price'].toDouble());
                       log('burada 1');
-                      widget.market.addDebt(
-                          double.parse(_textFieldController.text) *
-                              product['price']);
+
                       log('burada');
                       _textFieldController.clear();
                       Navigator.pop(context); // Close the add todo screen

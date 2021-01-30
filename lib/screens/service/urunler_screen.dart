@@ -34,7 +34,7 @@ class _UrunScreen extends State<UrunScreen> {
   }
 
   void add(String name, double price) {
-    productRef.child(name).set({'name': name, 'price': price});
+    productRef.child(name).update({'name': name, 'price': price});
   }
 
   void delete() {
@@ -256,7 +256,7 @@ class _UrunScreen extends State<UrunScreen> {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
                       productRef.child(oldName).remove();
-                      productRef.child(_textFieldController.text).set({
+                      productRef.child(_textFieldController.text).update({
                         'name': _textFieldController.text,
                         'price': double.parse(_textFieldController2.text)
                       });

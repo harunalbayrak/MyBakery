@@ -5,12 +5,14 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_my_bakery/screens/service/market_detail_screen.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/market_model.dart';
+import 'package:flutter_my_bakery/screens/service/service_models/service_model.dart';
 import 'package:flutter_my_bakery/screens/service/widgets/market_info.dart';
 import 'package:flutter_my_bakery/services/databaseService.dart';
 
-void main() => runApp(Marketler());
-
 class Marketler extends StatefulWidget {
+  final ServiceModel service;
+  Marketler(this.service);
+
   @override
   _MarketlerState createState() => _MarketlerState();
 }
@@ -39,7 +41,7 @@ class _MarketlerState extends State<Marketler> {
           itemBuilder: (BuildContext context, DataSnapshot snapshot,
               Animation<double> animation, int index) {
             Map market = snapshot.value;
-            var newMarket = Market(market: market);
+            var newMarket = Market(market: market, service: widget.service);
             return InkWell(
                 child: MarketInfo(market: newMarket),
                 onTap: () {

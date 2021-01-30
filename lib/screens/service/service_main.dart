@@ -233,7 +233,7 @@ class _ServiceState extends State<Service> {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (_) {
-                                              return Marketler();
+                                              return Marketler(_service);
                                             },
                                           ),
                                         );

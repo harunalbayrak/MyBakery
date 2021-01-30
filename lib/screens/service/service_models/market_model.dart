@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_my_bakery/screens/service/service_models/date_data.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/service_model.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/urun_model.dart';
@@ -15,7 +17,7 @@ class Market {
   ServiceModel service;
 
   var marketReference;
-  Market({Map market}) {
+  Market({Map market, this.service}) {
     name = market["name"] != null ? market["name"] : "";
     debt = market["debt"] != null ? double.parse(market["debt"]) : 0;
     var day =
@@ -30,28 +32,34 @@ class Market {
       delivered = 0;
       bayat = 0;
     }
-    service = ServiceModel();
+
     marketReference = DatabaseService('bakery').marketsReference.child(name);
   }
 
   void pay(double amount) {
     taken += amount;
     debt -= amount;
+    service.addTaken(amount);
+    service.addDebt(-amount);
     updateDb();
   }
 
   void addDebt(double amount) {
     debt += amount;
+    service.addDebt(amount);
     updateDb();
   }
 
   void addBayat(int amount) {
     bayat += amount;
+    service.addBayat(amount);
     updateDb();
   }
 
   void addEkmek(int amount) {
+    log(amount.toString());
     delivered += amount;
+    service.addDelived(amount);
 
     updateDb();
   }
@@ -60,8 +68,8 @@ class Market {
     final dayReference =
         marketReference.child('dailyData').child(DateData.date);
     // final globalDayReference = DatabaseService.dailyDataReference.child(DateData.date);
-    marketReference.updateByKey({'name': name, 'debt': debt.toString()});
-    dayReference.updateByKey({
+    marketReference.update({'name': name, 'debt': debt.toString()});
+    dayReference.update({
       'delivered': delivered.toString(),
       'bayat': bayat.toString(),
       'taken': taken.toString(),
