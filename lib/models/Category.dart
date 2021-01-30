@@ -6,11 +6,9 @@ class Category {
 
   Map<String, dynamic> toMap() {
     Map deneme = {
-      "name" : "deneme",
+      "name": "deneme",
       "price": 1,
     };
-    return {
-      "deneme" : deneme
-    };
+    return {"deneme": deneme};
   }
 }

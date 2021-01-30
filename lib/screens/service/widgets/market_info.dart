@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_my_bakery/screens/service/market_detail_screen.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/market_model.dart';
 
 class MarketInfo extends StatefulWidget {

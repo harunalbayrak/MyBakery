@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_my_bakery/screens/authenticate/sign_in.dart';
 import 'package:flutter_my_bakery/screens/home/bottom_bar_state.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_my_bakery/screens/service/service_main.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/tezgahtar.dart';
-import 'package:flutter_my_bakery/services/databaseService.dart';
-import 'package:flutter_my_bakery/shared/loading.dart';
 
 String role;
 
@@ -44,7 +42,11 @@ class _MainScreenState extends State<MainScreen> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User> snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
-            Firestore.instance.collection('users').document(snapshot.data.uid).get().then((DocumentSnapshot snapshot2) {
+            Firestore.instance
+                .collection('users')
+                .document(snapshot.data.uid)
+                .get()
+                .then((DocumentSnapshot snapshot2) {
               Map x = snapshot2.data();
               print(x);
 
@@ -56,11 +58,17 @@ class _MainScreenState extends State<MainScreen> {
             //print("role:");
             //print(role);
 
-            if(role == "Yönetici" || role == "Yonetici" || role == "yönetici" || role == "yonetici"){
-            return BottomBarState();
-            } else if(role == "Tezgahtar" || role == "tezgahtar"){
+            if (role == "Yönetici" ||
+                role == "Yonetici" ||
+                role == "yönetici" ||
+                role == "yonetici") {
+              return BottomBarState();
+            } else if (role == "Tezgahtar" || role == "tezgahtar") {
               return Tezgahtar();
-            } else if(role == "Şoför" || role == "Soför" || role == "Şofor" || role == "Sofor"){
+            } else if (role == "Şoför" ||
+                role == "Soför" ||
+                role == "Şofor" ||
+                role == "Sofor") {
               return Service();
             }
           }
@@ -69,12 +77,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   String getRole(String docID) {
-    Firestore.instance.collection('users').document(docID).get().then((DocumentSnapshot snapshot) {
+    Firestore.instance
+        .collection('users')
+        .document(docID)
+        .get()
+        .then((DocumentSnapshot snapshot) {
       Map x = snapshot.data();
       print(x["role"]);
 
       return x["role"];
     });
   }
-
 }

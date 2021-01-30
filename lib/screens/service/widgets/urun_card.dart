@@ -1,8 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_my_bakery/screens/service/service_models/urun_model.dart';
-import 'package:flutter_my_bakery/shared/constants.dart';
 
 class UrunCard extends StatefulWidget {
   final Color color;

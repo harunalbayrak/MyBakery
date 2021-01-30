@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_my_bakery/screens/service/marketler_screen.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/date_data.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/service_model.dart';
-
 import 'package:flutter_my_bakery/services/databaseService.dart';
 
-import 'package:flutter_my_bakery/services/auth.dart';
 import 'info_card.dart';
 
 class Service extends StatefulWidget {

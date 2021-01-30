@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_my_bakery/screens/service/info_card.dart';
-
 import 'package:flutter_my_bakery/screens/service/service_models/market_model.dart';
-import 'package:flutter_my_bakery/screens/service/widgets/service_card.dart';
 import 'package:flutter_my_bakery/screens/service/urunler_screen.dart';
+import 'package:flutter_my_bakery/screens/service/widgets/service_card.dart';
 import 'package:flutter_my_bakery/shared/constants.dart';
 
 class MarketDetail extends StatefulWidget {

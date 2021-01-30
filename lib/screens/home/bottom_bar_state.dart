@@ -1,9 +1,8 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_my_bakery/services/auth.dart';
 import 'package:flutter_my_bakery/services/databaseService.dart';
 import 'package:flutter_my_bakery/shared/bottom_bar.dart';
 import 'package:flutter_my_bakery/shared/loading.dart';
-import 'package:flutter_my_bakery/services/auth.dart';
 import 'package:flutter_my_bakery/shared/states.dart' as states;
 
 class BottomBarState extends StatefulWidget {

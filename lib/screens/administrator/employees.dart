@@ -1,12 +1,11 @@
 import 'dart:math';
 
-import 'package:faker/faker.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_my_bakery/models/Worker.dart';
 import 'package:flutter_my_bakery/services/databaseService.dart';
 import 'package:flutter_my_bakery/shared/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 String uid;
 
@@ -39,92 +38,129 @@ class _EmployeesState extends State<Employees> {
 
     return StreamBuilder<Event>(
       stream: service.workersReference.onValue,
-      builder: (context,snapshot){
+      builder: (context, snapshot) {
         Map data = {};
         List item = [];
-        if(snapshot.hasData) {
+        if (snapshot.hasData) {
           data = snapshot.data.snapshot.value;
-          if(data == null){
+          if (data == null) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Employees",style: TextStyle(fontFamily: "Poppins"),),
+                title: Text(
+                  "Employees",
+                  style: TextStyle(fontFamily: "Poppins"),
+                ),
                 centerTitle: true,
                 backgroundColor: Colors.blueGrey,
               ),
               floatingActionButton: FloatingActionButton(
-                onPressed: (){
-                  confirmationPopup(context,image,0,0,"",controller,controller2,controller3);
+                onPressed: () {
+                  confirmationPopup(context, image, 0, 0, "", controller,
+                      controller2, controller3);
                 },
                 child: Icon(Icons.add),
               ),
             );
           }
-          data.forEach(
-                  (index, data) => item.add({"key": index, ...data}));
+          data.forEach((index, data) => item.add({"key": index, ...data}));
         }
 
-        if (snapshot.hasError)
-          return new Text('Error: ${snapshot.error}');
-        switch (snapshot.connectionState){
+        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+        switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return  Container(
+            return Container(
               height: 200.0,
               alignment: Alignment.center,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black45),
               ),
             );
-          default: return Scaffold(
-            appBar: AppBar(
-              title: Text("Employees",style: TextStyle(fontFamily: "Poppins"),),
-              centerTitle: true,
-              backgroundColor: Colors.blueGrey,
-            ),
-            body: ListView.builder(
-              itemCount: item.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onLongPress: (){
-                    controller.text = item[index]["name"];
-                    controller2.text = item[index]["job"];
-                    controller3.text = item[index]["mail"];
-                    uid = item[index]["key"];
-                    confirmationPopup(context,image,1,index,item[index]["mail"],controller,controller2,controller3);
-                  },
-                  onTap: () {
-                    controller.text = item[index]["name"];
-                    controller2.text = item[index]["job"];
-                    controller3.text = item[index]["mail"];
-                    uid = item[index]["key"];
-                    confirmationPopup(context,image,1,index,item[index]["mail"],controller,controller2,controller3);
-                  },
-                  leading: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: sizeW,
-                      minHeight: sizeH,
-                      maxWidth: sizeW + 20,
-                      maxHeight: sizeH + 20,
+          default:
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  "Employees",
+                  style: TextStyle(fontFamily: "Poppins"),
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.blueGrey,
+              ),
+              body: ListView.builder(
+                itemCount: item.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onLongPress: () {
+                      controller.text = item[index]["name"];
+                      controller2.text = item[index]["job"];
+                      controller3.text = item[index]["mail"];
+                      uid = item[index]["key"];
+                      confirmationPopup(
+                          context,
+                          image,
+                          1,
+                          index,
+                          item[index]["mail"],
+                          controller,
+                          controller2,
+                          controller3);
+                    },
+                    onTap: () {
+                      controller.text = item[index]["name"];
+                      controller2.text = item[index]["job"];
+                      controller3.text = item[index]["mail"];
+                      uid = item[index]["key"];
+                      confirmationPopup(
+                          context,
+                          image,
+                          1,
+                          index,
+                          item[index]["mail"],
+                          controller,
+                          controller2,
+                          controller3);
+                    },
+                    leading: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: sizeW,
+                        minHeight: sizeH,
+                        maxWidth: sizeW + 20,
+                        maxHeight: sizeH + 20,
+                      ),
+                      child: image,
                     ),
-                    child: image,
-                  ),
-                  title: Text(item[index]["name"],style: TextStyle(fontFamily: "Poppins"),),
-                  trailing: Text(item[index]["job"],style: TextStyle(fontFamily: "Poppins"),),
-                );
-              },
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: (){
-                confirmationPopup(context,image,0,0,"",controller,controller2,controller3);
-              },
-              child: Icon(Icons.add),
-            ),
-          );
+                    title: Text(
+                      item[index]["name"],
+                      style: TextStyle(fontFamily: "Poppins"),
+                    ),
+                    trailing: Text(
+                      item[index]["job"],
+                      style: TextStyle(fontFamily: "Poppins"),
+                    ),
+                  );
+                },
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  confirmationPopup(context, image, 0, 0, "", controller,
+                      controller2, controller3);
+                },
+                child: Icon(Icons.add),
+              ),
+            );
         }
       },
     );
   }
 
-  confirmationPopup(BuildContext dialogContext,Widget image,int val,int index,String mail,TextEditingController controller,TextEditingController controller2,TextEditingController controller3) {
+  confirmationPopup(
+      BuildContext dialogContext,
+      Widget image,
+      int val,
+      int index,
+      String mail,
+      TextEditingController controller,
+      TextEditingController controller2,
+      TextEditingController controller3) {
     final contextW = MediaQuery.of(context).size.width;
     final sizeW = contextW / 20;
 
@@ -133,7 +169,8 @@ class _EmployeesState extends State<Employees> {
       overlayColor: Colors.black87,
       isCloseButton: false,
       isOverlayTapDismiss: true,
-      titleStyle: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.bold, fontSize: sizeW),
+      titleStyle: TextStyle(
+          fontFamily: "Poppins", fontWeight: FontWeight.bold, fontSize: sizeW),
       animationDuration: Duration(milliseconds: 400),
     );
 
@@ -143,9 +180,13 @@ class _EmployeesState extends State<Employees> {
         title: val == 0 ? "Çalışan ekle" : "Çalışanı düzenle",
         content: Column(
           children: [
-            SizedBox(height: sizeW,),
+            SizedBox(
+              height: sizeW,
+            ),
             image,
-            SizedBox(height: sizeW,),
+            SizedBox(
+              height: sizeW,
+            ),
             TextFormField(
               controller: controller,
               style: textStyle1,
@@ -154,12 +195,12 @@ class _EmployeesState extends State<Employees> {
               ),
               validator: (val) => val.isEmpty ? "Enter an email" : null,
               onChanged: (val) {
-                setState(() {
-
-                });
+                setState(() {});
               },
             ),
-            SizedBox(height: sizeW,),
+            SizedBox(
+              height: sizeW,
+            ),
             TextFormField(
               controller: controller2,
               style: textStyle1,
@@ -168,12 +209,12 @@ class _EmployeesState extends State<Employees> {
               ),
               validator: (val) => val.isEmpty ? "Enter an email" : null,
               onChanged: (val) {
-                setState(() {
-
-                });
+                setState(() {});
               },
             ),
-            SizedBox(height: sizeW,),
+            SizedBox(
+              height: sizeW,
+            ),
             TextFormField(
               controller: controller3,
               style: textStyle1,
@@ -182,57 +223,63 @@ class _EmployeesState extends State<Employees> {
               ),
               validator: (val) => val.isEmpty ? "Enter an email" : null,
               onChanged: (val) {
-                setState(() {
-
-                });
+                setState(() {});
               },
             ),
           ],
         ),
         buttons: [
-          val == 1 ? DialogButton(
-            child: Text(
-              "Sil",
-              style: TextStyle(color: Colors.white, fontSize: sizeW),
-            ),
-            onPressed: () {
-              setState(() {
-                service.deleteWorker(uid);
-              });
-              Navigator.pop(context);
-            },
-            color: Colors.red,
-          ) :
-          DialogButton(
-            child: Text(
-              "İptal",
-              style: TextStyle(color: Colors.white, fontSize: sizeW),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            color: Colors.red,
-          ),
+          val == 1
+              ? DialogButton(
+                  child: Text(
+                    "Sil",
+                    style: TextStyle(color: Colors.white, fontSize: sizeW),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      service.deleteWorker(uid);
+                    });
+                    Navigator.pop(context);
+                  },
+                  color: Colors.red,
+                )
+              : DialogButton(
+                  child: Text(
+                    "İptal",
+                    style: TextStyle(color: Colors.white, fontSize: sizeW),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  color: Colors.red,
+                ),
           DialogButton(
             child: Text(
               val == 0 ? "Ekle" : "Düzenle",
               style: TextStyle(color: Colors.white, fontSize: sizeW),
             ),
             onPressed: () {
-              if(controller.value.text != "" && controller2.value.text != ""){
-                var faker = new Faker();
+              if (controller.value.text != "" && controller2.value.text != "") {
                 int passwd = 0;
                 for (var i = 0; i < 6; i++) {
                   passwd = passwd + ((Random().nextInt(8) + 1) * pow(10, i));
                 }
                 setState(() {
-                  if(val == 0) {
-                    final newWorker = Worker(name: controller.value.text, mail: controller3.value.text, job: controller2.value.text,password: passwd.toString());
+                  if (val == 0) {
+                    final newWorker = Worker(
+                        name: controller.value.text,
+                        mail: controller3.value.text,
+                        job: controller2.value.text,
+                        password: passwd.toString());
                     service.addWorker(newWorker);
                     service.registerWorkers();
                   } else {
-                    final newWorker = Worker(name: controller.value.text, mail: controller3.value.text, job: controller2.value.text,password: passwd.toString());
-                    service.updateWorker(uid,newWorker);
+                    final newWorker = Worker(
+                        name: controller.value.text,
+                        mail: controller3.value.text,
+                        job: controller2.value.text,
+                        password: passwd.toString());
+                    service.updateWorker(uid, newWorker);
                   }
                 });
               }
@@ -243,4 +290,3 @@ class _EmployeesState extends State<Employees> {
         ]).show();
   }
 }
-
