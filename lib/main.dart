@@ -55,7 +55,9 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     service.bakeryReference.onValue.listen((event){
       Map value = event.snapshot.value;
-      bakery = value;
+      setState(() {
+        bakery = value;
+      });
       //print(value);
     });
 
@@ -76,9 +78,9 @@ class _MainScreenState extends State<MainScreen> {
               setState(() {
                 role = x["role"];
               });
-              print(role);
             });
 
+            //print(bakery);
 
             if(role == "Yönetici" ||
                 role == "Yonetici" ||
