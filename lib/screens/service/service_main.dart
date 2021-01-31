@@ -62,204 +62,216 @@ class _ServiceState extends State<Service> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<double>(
-      future: _service.local(), // async work
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Center(child: CircularProgressIndicator.adaptive());
-          default:
-            if (snapshot.hasError)
-              return Center(
-                  child: Text(
-                'Error: ${snapshot.error}',
-                style: TextStyle(fontSize: 14),
-              ));
-            else
-              return Scaffold(
-                backgroundColor: Colors.deepPurpleAccent[10],
-                appBar: AppBar(
-                  title: Text(
-                    "Ana Menü",
-                    style: TextStyle(fontFamily: "Poppins"),
+    return Scaffold(
+      body: FutureBuilder<double>(
+        future: _service.local(), // async work
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator.adaptive());
+            default:
+              if (snapshot.hasError)
+                return Center(
+                    child: Text(
+                  'Error: ${snapshot.error}',
+                  style: TextStyle(fontSize: 14),
+                ));
+              else
+                return Scaffold(
+                  backgroundColor: Colors.deepPurpleAccent[10],
+                  appBar: AppBar(
+                    title: Text(
+                      "Ana Menü",
+                      style: TextStyle(fontFamily: "Poppins"),
+                    ),
+                    backgroundColor: Colors.blueGrey,
+                    centerTitle: true,
                   ),
-                  backgroundColor: Colors.blueGrey,
-                  centerTitle: true,
-                ),
-                body: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/background2.jpg"),
-                        fit: BoxFit.cover),
-                  ),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.all(10),
-                          child: RaisedButton(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                  body: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/background2.jpg"),
+                          fit: BoxFit.cover),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            child: RaisedButton(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    DateData.currentDate.day.toString() +
+                                        '.' +
+                                        DateData.currentDate.month.toString() +
+                                        '.' +
+                                        DateData.currentDate.year.toString(),
+                                    style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: Colors.white),
+                                  ),
+                                  Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                              color: Colors.indigo,
+                              onPressed: () async {
+                                await _selectDate(context);
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView(
                               children: [
-                                Text(
-                                  DateData.currentDate.day.toString() +
-                                      '.' +
-                                      DateData.currentDate.month.toString() +
-                                      '.' +
-                                      DateData.currentDate.year.toString(),
-                                  style: TextStyle(
-                                      fontFamily: "Poppins",
-                                      color: Colors.white),
+                                //ilk satır
+                                Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2 -
+                                              20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              6,
+                                          child: InfoCard(
+                                            label: "ÜRÜN",
+                                            info: _service.delivered.toString(),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2 -
+                                              20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              6,
+                                          child: InfoCard(
+                                            label: "ÖDEME",
+                                            info: _service.taken.toString(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2 -
+                                              20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              6,
+                                          child: InfoCard(
+                                            label: "BAYAT",
+                                            info: _service.bayat.toString(),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2 -
+                                              20,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              6,
+                                          child: InfoCard(
+                                            label: "BORÇ",
+                                            info: _service.debt.toString(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                Icon(
-                                  Icons.keyboard_arrow_right,
-                                  color: Colors.white,
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                20),
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: RaisedButton(
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        padding: EdgeInsets.all(30),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              "MARKETLER",
+                                              style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.shopping_basket,
+                                              size: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  15,
+                                            )
+                                          ],
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) {
+                                                return Marketler(_service);
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              20,
+                                      width: MediaQuery.of(context).size.width /
+                                          20,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                            color: Colors.indigo,
-                            onPressed: () async {
-                              await _selectDate(context);
-                              setState(() {});
-                            },
                           ),
-                        ),
-                        Expanded(
-                          child: ListView(
-                            children: [
-                              //ilk satır
-                              Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    2 -
-                                                20,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                6,
-                                        child: InfoCard(
-                                          label: "ÜRÜN",
-                                          info: _service.delivered.toString(),
-                                        ),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    2 -
-                                                20,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                6,
-                                        child: InfoCard(
-                                          label: "ÖDEME",
-                                          info: _service.taken.toString(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    2 -
-                                                20,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                6,
-                                        child: InfoCard(
-                                          label: "BAYAT",
-                                          info: _service.bayat.toString(),
-                                        ),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                    2 -
-                                                20,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                6,
-                                        child: InfoCard(
-                                          label: "BORÇ",
-                                          info: _service.debt.toString(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              20),
-                                  Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: RaisedButton(
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      padding: EdgeInsets.all(30),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Text(
-                                            "MARKETLER",
-                                            style: TextStyle(
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.shopping_basket,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                15,
-                                          )
-                                        ],
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (_) {
-                                              return Marketler(_service);
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height:
-                                        MediaQuery.of(context).size.height / 20,
-                                    width:
-                                        MediaQuery.of(context).size.width / 20,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-        }
-      },
+                );
+          }
+        },
+      ),
     );
   }
 
