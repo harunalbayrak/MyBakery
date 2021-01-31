@@ -5,9 +5,11 @@ import 'dart:ui';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_my_bakery/screens/authenticate/sign_in.dart';
 import 'package:flutter_my_bakery/screens/service/marketler_screen.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/date_data.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/service_model.dart';
+import 'package:flutter_my_bakery/services/auth.dart';
 import 'package:flutter_my_bakery/services/databaseService.dart';
 
 import 'info_card.dart';
@@ -18,6 +20,7 @@ class Service extends StatefulWidget {
 }
 
 class _ServiceState extends State<Service> {
+  final AuthService _auth = AuthService();
   bool loading = false;
   Future<String> f;
   ServiceModel _service = ServiceModel();
@@ -87,6 +90,29 @@ class _ServiceState extends State<Service> {
                     ),
                     backgroundColor: Colors.blueGrey,
                     centerTitle: true,
+                    actions: <Widget>[
+                      FlatButton.icon(
+                        icon: Icon(
+                          Icons.exit_to_app,
+                          color: Colors.blueGrey[100],
+                        ),
+                        label: Text(
+                          "Exit",
+                          style: TextStyle(
+                              color: Colors.blueGrey[100], fontFamily: "Poppins"),
+                        ),
+                        onPressed: () async {
+                          setState(() => loading = true);
+                          dynamic result = await _auth.signOut();
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+                          if (result == null) {
+                            setState(() {
+                              loading = false;
+                            });
+                          }
+                        },
+                      )
+                    ],
                   ),
                   body: Container(
                     decoration: BoxDecoration(
