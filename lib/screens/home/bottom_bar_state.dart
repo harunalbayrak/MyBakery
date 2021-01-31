@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_my_bakery/screens/authenticate/sign_in.dart';
 import 'package:flutter_my_bakery/services/auth.dart';
 import 'package:flutter_my_bakery/services/databaseService.dart';
 import 'package:flutter_my_bakery/shared/bottom_bar.dart';
@@ -51,6 +52,7 @@ class _BottomBarStateState extends State<BottomBarState> {
                   onPressed: () async {
                     setState(() => loading = true);
                     dynamic result = await _auth.signOut();
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
                     if (result == null) {
                       setState(() {
                         loading = false;

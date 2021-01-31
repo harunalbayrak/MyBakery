@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_my_bakery/screens/authenticate/sign_in.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/odeme.dart';
 import 'package:flutter_my_bakery/services/auth.dart';
 import 'package:flutter_my_bakery/shared/loading.dart';
@@ -50,6 +51,7 @@ class _TezgahtarState extends State<Tezgahtar> {
                   onPressed: () async {
                     setState(() => loading = true);
                     dynamic result = await _auth.signOut();
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
                     if (result == null) {
                       setState(() {
                         loading = false;
