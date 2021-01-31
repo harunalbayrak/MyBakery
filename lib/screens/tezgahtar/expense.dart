@@ -35,7 +35,7 @@ class _ExpenseState extends State<Expense> {
 
   setExpensesFromDB() async {
     expensesList.clear();
-    print("Entered setExpenses");
+    //print("Entered setExpenses");
     // var fetchedExpenses = await NotesDatabaseService.db.getExpensesFromDB();
     // setState(() {
     //   expensesList = fetchedExpenses;
@@ -48,10 +48,6 @@ class _ExpenseState extends State<Expense> {
       Map<dynamic, dynamic> map = snapshot.value;
       if (map != null) {
         map.forEach((key, values) {
-          print(values);
-          print("data: " +
-              values["title"] +
-              "--------------------------------------");
           setState(() {
             expensesList.add(ExpensesModel.withID(
                 values["title"],
@@ -131,7 +127,7 @@ class _ExpenseState extends State<Expense> {
 
   void refetchExpensesFromDB() async {
     await setExpensesFromDB();
-    print("Refetched notes");
+    ////print("Refetched notes");
   }
 
   openExpenseToRead(ExpensesModel expenseData) async {

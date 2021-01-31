@@ -401,9 +401,9 @@ class VeresiyeCardComponent2 extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             onTap: () async {
               ClipboardData data = await Clipboard.getData('text/plain');
-              print("burada mı : ");
-              print(double.parse(data.text));
-              print("değil mi");
+              //print("burada mı : ");
+              //print(double.parse(data.text));
+              //print("değil mi");
               onTapAction(context, veresiyeData, double.parse(data.text));
             },
 

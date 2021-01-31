@@ -26,7 +26,7 @@ class DatabaseService {
   }
 
   void addEkmek(String uid, Map data) {
-    print(data.toString());
+    //print(data.toString());
     var day = formatter.format(DateTime.now());
     dailyDataReference.child(day).child("producedBreads").child(uid).set(data);
   }
@@ -37,23 +37,23 @@ class DatabaseService {
   }
 
   void addNote(String uid, Map data) {
-    // print("inside addNote");
-    // print("data: " + data.toString());
-    // print("uid: " + uid);
+    // //print("inside addNote");
+    // //print("data: " + data.toString());
+    // //print("uid: " + uid);
     var day = formatter.format(DateTime.now());
     dailyDataReference.child(day).child("notes").child(uid).set(data);
   }
 
   void addVeresiye(String title, Map data) {
-    print("inside addVeresiye");
-    print("data: " + data.toString());
+    //print("inside addVeresiye");
+    //print("data: " + data.toString());
     veresiyelerDataReference.child(title).set(data);
   }
 
   void addTx(Map data) {
     var day = formatter.format(DateTime.now());
     var time = formatter2.format(DateTime.now());
-    print(time);
+    //print(time);
     dailyDataReference.child(day).child("tx").child(time).set(data);
   }
 
@@ -67,7 +67,7 @@ class DatabaseService {
   }
 
   void updateNote(String uid, Map data) {
-    print("inside update note: " + data.toString());
+    //print("inside update note: " + data.toString());
     var day = formatter.format(DateTime.now());
     dailyDataReference.child(day).child("notes").child(uid).update(data);
   }

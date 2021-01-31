@@ -10,9 +10,9 @@ class Reports extends StatefulWidget {
   int toplamCikanEkmek;
   int dagitimdaSatilanEkmek;
   int toplamKalanEkmek;
-  int vitrindenToplamSatisTutari;
-  int krediKartiSatisTutari;
-  int kasadaOlmasiGerekenTutar;
+  double vitrindenToplamSatisTutari;
+  double krediKartiSatisTutari;
+  double kasadaOlmasiGerekenTutar;
 
   Reports({Key key, this.toplamCikanEkmek, this.dagitimdaSatilanEkmek, this.toplamKalanEkmek, this.vitrindenToplamSatisTutari, this.krediKartiSatisTutari, this.kasadaOlmasiGerekenTutar}) : super(key: key);
 
@@ -84,30 +84,30 @@ class _ReportsState extends State<Reports> {
                                   showTitleActions: true,
                                   minTime: minTime,
                                   maxTime: maxTime, onChanged: (date) {
-                                    print('change $date');
+                                    //print('change $date');
                                   }, onConfirm: (date) {
-                                    print('confirm $date');
+                                    //print('confirm $date');
                                   }, currentTime: DateTime.now(), locale: LocaleType.tr);
                                 },
                               ),
                               Column(
                                 children: [
                                   Text("Vitrinden toplam satış tutarı",style: textStyle(Colors.green),),
-                                  Text("₺ " + widget.vitrindenToplamSatisTutari.toString(), style: textStyle(Colors.green),),
+                                  Text("₺ " + widget.vitrindenToplamSatisTutari.toInt().toString(), style: textStyle(Colors.green),),
                                 ],
                               ),
                               SizedBox(height: size1,),
                               Column(
                                 children: [
                                   Text("Kredi kartı ile yapılan satış tutarı",style: textStyle(Colors.purple),),
-                                  Text("₺ " + widget.krediKartiSatisTutari.toString(), style: textStyle(Colors.purple),),
+                                  Text("₺ " + widget.krediKartiSatisTutari.toInt().toString(), style: textStyle(Colors.purple),),
                                 ],
                               ),
                               SizedBox(height: size1,),
                               Column(
                                 children: [
                                   Text("Kasada olması gereken tutar",style: textStyle(Colors.blue),),
-                                  Text("₺ " + widget.kasadaOlmasiGerekenTutar.toString(), style: textStyle(Colors.blue),),
+                                  Text("₺ " + widget.kasadaOlmasiGerekenTutar.toInt().toString(), style: textStyle(Colors.blue),),
                                 ],
                               ),
                             ],
