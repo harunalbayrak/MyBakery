@@ -9,14 +9,16 @@ import '../../widgets/NewWorker.dart';
 
 class Workers extends StatefulWidget {
   final List<Worker> list;
-  Workers({this.list});
+  final String bakeryName;
+  Workers({this.list, this.bakeryName});
   @override
-  _WorkersState createState() => _WorkersState(workerList: list);
+  _WorkersState createState() => _WorkersState(list, bakeryName);
 }
 
 class _WorkersState extends State<Workers> {
   List<Worker> workerList = [];
-  DatabaseService sv = DatabaseService();
+  String bakeryName;
+  DatabaseService sv;
   void _addNewWorker(String workerName, String workerMail, String gorevi) {
     int passwd = 0;
     for (var i = 0; i < 6; i++) {
@@ -35,7 +37,11 @@ class _WorkersState extends State<Workers> {
     });
   }
 
-  _WorkersState({this.workerList});
+  _WorkersState(List<Worker> workers, String bakery) {
+    workerList = workers;
+    bakeryName = bakery;
+    sv = DatabaseService(bakeryName);
+  }
 
   void _startAddNewWorker(BuildContext ctx) {
     showModalBottomSheet(
@@ -63,7 +69,7 @@ class _WorkersState extends State<Workers> {
     Navigator.of(cx).push(
       MaterialPageRoute(
         builder: (_) {
-          return Markets(list: marketList);
+          return Markets(list: marketList, bakeryName: bakeryName);
         },
       ),
     );

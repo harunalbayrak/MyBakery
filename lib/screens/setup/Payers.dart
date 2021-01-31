@@ -6,14 +6,15 @@ import 'package:flutter_my_bakery/services/databaseService.dart';
 
 class Payers extends StatefulWidget {
   final List<Payer> list;
-  Payers({this.list});
+  final String bakeryName;
+  Payers({this.list, this.bakeryName});
   @override
-  _PayersState createState() => _PayersState(payerList: list);
+  _PayersState createState() => _PayersState(list, bakeryName);
 }
 
 class _PayersState extends State<Payers> {
-  DatabaseService sv = DatabaseService();
-
+  String bakeryName;
+  DatabaseService sv;
   List<Payer> payerList = [];
   void _addNewPayer(String prName, double prAmount) {
     final newPayer = Payer(name: prName, debt: prAmount);
@@ -23,7 +24,11 @@ class _PayersState extends State<Payers> {
     });
   }
 
-  _PayersState({this.payerList});
+  _PayersState(List<Payer> payers, String bakery) {
+    payerList = payers;
+    bakeryName = bakery;
+    sv = DatabaseService(bakery);
+  }
 
   void _startAddNewpayer(BuildContext ctx) {
     showModalBottomSheet(

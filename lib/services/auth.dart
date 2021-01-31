@@ -17,9 +17,10 @@ class AuthService {
   // register with email&password
   Future registerWithEmailAndPassword(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      var x = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      return "Signed up";
+      x.user.uid;
+      return x.user.uid;
     } catch (e) {
       print(e.toString());
       return null;

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/odeme_kategori.dart';
-import 'package:flutter_my_bakery/screens/tezgahtar/veresiye.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:flutter_my_bakery/screens/tezgahtar/veresiye2.dart';
+import 'package:flutter_my_bakery/services/crud.dart';
 import 'package:flutter_my_bakery/shared/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Sepet extends StatefulWidget {
   List product;
   List price;
   List piece;
-
   Sepet({Key key, this.product, this.price, this.piece}) : super(key: key);
 
   @override
@@ -17,19 +18,26 @@ class Sepet extends StatefulWidget {
 }
 
 class _SepetState extends State<Sepet> {
-  int sumPrice() {
-    int sum = 0;
+  double sumPrice() {
+    print("QQQQQQQQQQQQQQQQQQQQQQQQQQQQ: " + widget.price.length.toString());
+    if (widget.price.length == 0) {
+      // print("0 dönmüş olmalı\nwwwwwwwwwwwwwwwwwwwwwwwwwwww: " + (price == null).toString());
+      return 0;
+    }
+    double sum = 0;
     for (int i = 0; i < widget.price.length; ++i) {
       sum += price[i] * piece[i];
     }
     return sum;
   }
 
+  DatabaseService service = DatabaseService();
+
   void goTezgahtar(BuildContext cx) {
     setState(() {
-      product = [];
-      piece = [];
-      price = [];
+      product.clear();
+      piece.clear();
+      price.clear();
     });
     Fluttertoast.showToast(
       msg: "✓ Kaydedildi",
@@ -46,9 +54,9 @@ class _SepetState extends State<Sepet> {
 
   void goVeresiye(BuildContext cx) {
     setState(() {
-      product = [];
-      piece = [];
-      price = [];
+      product.clear();
+      piece.clear();
+      price.clear();
     });
     // Fluttertoast.showToast(
     //   msg: "✓ Kaydedildi",
@@ -64,7 +72,7 @@ class _SepetState extends State<Sepet> {
 
     Navigator.push(
       cx,
-      MaterialPageRoute(builder: (context) => Veresiye()),
+      MaterialPageRoute(builder: (context) => Veresiye2()),
     );
   }
 
@@ -135,11 +143,6 @@ class _SepetState extends State<Sepet> {
               RawMaterialButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  // setState(() {
-                  //   product = [];
-                  //   price = [];
-                  //   piece = [];
-                  // });
                 },
                 elevation: 2.0,
                 fillColor: Colors.red,
@@ -156,7 +159,7 @@ class _SepetState extends State<Sepet> {
               ),
               RawMaterialButton(
                 onPressed: () {
-                  if (product.isNotEmpty) confirmationPopup2(context);
+                  if (product.isNotEmpty) confirmationPopup2(context, service);
                 },
                 elevation: 2.0,
                 fillColor: Colors.green,
@@ -337,7 +340,7 @@ class _SepetState extends State<Sepet> {
         ]).show();
   }
 
-  confirmationPopup2(BuildContext dialogContext) {
+  confirmationPopup2(BuildContext dialogContext, DatabaseService service) {
     final contextW = MediaQuery.of(context).size.width;
     final sizeW = contextW / 20;
 
@@ -350,6 +353,22 @@ class _SepetState extends State<Sepet> {
       animationDuration: Duration(milliseconds: 400),
     );
 
+    //product - price - piece
+    // product
+    //    price
+    //    piece
+
+    Map<dynamic, dynamic> res = {};
+    List<Map<dynamic, dynamic>> tx = List();
+    for (int i = 0; i < product.length; i++) {
+      // print(product[i].toString());
+      // print(price[i] * 1.0 is double);
+      ItemHolder ele =
+          ItemHolder(product[i].toString(), price[i] * 1.0, piece[i]);
+      tx.insert(i, ele.toMap());
+      // print(tx);
+    }
+
     Alert(
         context: dialogContext,
         style: alertStyle,
@@ -361,6 +380,13 @@ class _SepetState extends State<Sepet> {
             ),
             RaisedButton(
               onPressed: () {
+                // print(res);
+                res.addAll({
+                  'Ürünler': tx,
+                  'Ödeme Yöntemi': 'Kredi Kartı',
+                  'Toplam Alınan Ücret': sumPrice()
+                });
+                service.addTx(res);
                 goTezgahtar(context);
               },
               child: Row(
@@ -387,6 +413,12 @@ class _SepetState extends State<Sepet> {
             ),
             RaisedButton(
               onPressed: () {
+                res.addAll({
+                  'Ürünler': tx,
+                  'Ödeme Yöntemi': "Nakit Ödeme",
+                  'Toplam Alınan Ücret': sumPrice()
+                });
+                service.addTx(res);
                 goTezgahtar(context);
               },
               child: Row(
@@ -413,6 +445,14 @@ class _SepetState extends State<Sepet> {
             ),
             RaisedButton(
               onPressed: () {
+                Clipboard.setData(
+                    new ClipboardData(text: sumPrice().toString()));
+                res.addAll({
+                  'Ürünler': tx,
+                  'Ödeme Yöntemi': "Veresiye",
+                  'Toplam Alınan Ücret': sumPrice()
+                });
+                service.addTx(res);
                 goVeresiye(context);
               },
               child: Row(
@@ -440,5 +480,21 @@ class _SepetState extends State<Sepet> {
           ],
         ),
         buttons: []).show();
+  }
+}
+
+class ItemHolder {
+  String product;
+  double price;
+  int piece;
+
+  ItemHolder(this.product, this.price, this.piece);
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'product': this.product,
+      'price': this.price,
+      'piece': this.piece
+    };
   }
 }

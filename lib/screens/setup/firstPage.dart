@@ -1,15 +1,41 @@
 import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:flutter_my_bakery/screens/setup/categories.dart';
 
-class FirstPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+import 'categories.dart';
+
+class FirstPage extends StatefulWidget {
+  @override
+  _FirstPageState createState() => _FirstPageState();
+}
+
+class _FirstPageState extends State<FirstPage> {
+  final _nameController = TextEditingController();
   void nextPage(BuildContext cx) {
-    Navigator.of(cx).push(
-      MaterialPageRoute(
-        builder: (_) {
-          return Categories();
-        },
-      ),
+    if (_nameController.text.isNotEmpty) {
+      Navigator.of(cx).push(
+        MaterialPageRoute(
+          builder: (_) {
+            return Categories(bakeryName: _nameController.text);
+          },
+        ),
+      );
+    } else
+      showAlertDialog(cx);
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text("İşletme adı boş bırakılamaz."),
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
@@ -45,7 +71,7 @@ class FirstPage extends StatelessWidget {
                         ),
                       ),
                       subtitle: Text(
-                        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words",
+                        "İşletmenizin adını girip alttaki butonuna tıklayarak fırınınızı oluşturmaya başlayabilirsiniz.",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -53,6 +79,23 @@ class FirstPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.only(left: 18, right: 5, bottom: 10),
+                  color: Colors.white70,
+                  child: TextField(
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      fontFamily: "Poppins",
+                    ),
+                    decoration: InputDecoration(labelText: 'İşletme adı :'),
+                    controller: _nameController,
+                    // onChanged: (val) {
+                    //   titleInput = val;
+                    // },
                   ),
                 ),
                 Container(

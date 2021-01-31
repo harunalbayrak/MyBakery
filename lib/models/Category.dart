@@ -5,8 +5,10 @@ class Category {
   const Category({this.name, this.image});
 
   Map<String, dynamic> toMap() {
-    return {
-      'name': name,
+    Map deneme = {
+      "name": "deneme",
+      "price": 1,
     };
+    return {"deneme": deneme};
   }
 }

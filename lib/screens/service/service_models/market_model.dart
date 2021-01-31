@@ -1,75 +1,81 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_my_bakery/screens/service/service_models/date_data.dart';
+import 'package:flutter_my_bakery/screens/service/service_models/service_model.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/urun_model.dart';
+import 'package:flutter_my_bakery/services/databaseService.dart';
 
 class Market {
   String name;
   List<Urun> urunler = [];
-  double borc = 0;
+  double debt = 0;
   double taken = 0.0;
   int bayat = 0;
   int delivered = 0;
-  var _marketReference;
-  Market(this.name, this.borc, this.urunler) {
-    _marketReference = FirebaseDatabase.instance
-        .reference()
-        .child('bakery')
-        .child('markets')
-        .child(name);
-  }
+  double totalDebt = 0;
+  int totalTaken = 0;
+  ServiceModel service;
 
-  void _addUrun(Urun urun) {
-    if (urunler.contains(urun)) {
-      urunler[urunler.indexOf(urun)].price = urun.price;
+  var marketReference;
+  Market({Map market, this.service}) {
+    name = market["name"] != null ? market["name"] : "";
+    debt = market["debt"] != null ? double.parse(market["debt"]) : 0;
+    var day =
+        market['dailyData'] != null ? market['dailyData'][DateData.date] : null;
+
+    if (day != null) {
+      taken = day["taken"] != null ? double.parse(day["taken"]) : 0;
+      delivered = day["delivered"] != null ? int.parse(day["delivered"]) : 0;
+      bayat = day["bayat"] != null ? int.parse(day["bayat"]) : 0;
     } else {
-      urunler.add(urun);
+      taken = 0;
+      delivered = 0;
+      bayat = 0;
     }
+
+    marketReference = DatabaseService('bakery').marketsReference.child(name);
   }
 
-  Future<void> updateProduct(Urun urun) async {
-    if (urun != null) {
-      var urunlerReference = _marketReference.child('urunler');
-      urunlerReference
-          .child(urun.name)
-          .set({'price': urun.price, 'name': urun.name});
-      _addUrun(urun);
-      DataSnapshot snapshot = await urunlerReference.once();
-      List<dynamic> resultList = snapshot.value;
-      for (var i = 0; i < resultList.length; i++) {
-        Map<dynamic, dynamic> map = Map.from(resultList[i]);
-        _addUrun(Urun.fromMap(map));
-      }
-    }
+  void pay(double amount) {
+    taken += amount;
+    debt -= amount;
+    service.addTaken(amount);
+    service.addDebt(-amount);
+    updateDb();
+  }
 
-    Future<void> updateDb(String date) async {
-      final dayReference = _marketReference.child('dailyData').child(date);
-      _marketReference.set({'totalDebt': borc});
-      dayReference.set({
-        'name': name,
-        'delivered': delivered,
-        'bayat': bayat,
-        'taken': taken,
-      });
-    }
+  void addDebt(double amount) {
+    debt += amount;
+    service.addDebt(amount);
+    updateDb();
+  }
 
-    Future<void> updateLocal(String date) async {
-      DataSnapshot snapshot = await _marketReference.once();
-      snapshot.value == null
-          ? borc = 0
-          : borc = snapshot.value['totalDebt'].toDouble();
+  void addBayat(int amount) {
+    bayat += amount;
+    service.addBayat(amount);
+    updateDb();
+  }
 
-      final dayReference = _marketReference.child('dailyData').child(date);
-      snapshot = await dayReference.once();
+  void addEkmek(int amount) {
+    delivered += amount;
+    service.addDelived(amount);
 
-      if (snapshot.value == null) {
-        delivered = 0;
-        bayat = 0;
-        taken = 0;
-      } else {
-        name = snapshot.value['name'];
-        delivered = snapshot.value['delivered'];
-        bayat = snapshot.value['bayat'];
-        taken = snapshot.value['taken'].toDouble();
-      }
-    }
+    updateDb();
+  }
+
+  Future<void> updateDb() async {
+    final dayReference =
+        marketReference.child('dailyData').child(DateData.date);
+    // final globalDayReference = DatabaseService.dailyDataReference.child(DateData.date);
+    marketReference.update({'name': name, 'debt': debt.toString()});
+    dayReference.update({
+      'delivered': delivered.toString(),
+      'bayat': bayat.toString(),
+      'taken': taken.toString(),
+    });
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return name + ' ' + debt.toString();
   }
 }

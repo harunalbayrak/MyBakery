@@ -5,17 +5,19 @@ import 'package:flutter_my_bakery/services/databaseService.dart';
 
 class Urunler extends StatefulWidget {
   final String category;
+  final String bakeryName;
   final List<Product> list;
-  Urunler({this.category, this.list});
+  Urunler({this.category, this.list, this.bakeryName});
   @override
-  _UrunlerState createState() =>
-      _UrunlerState(categoryName: category, productList: list);
+  _UrunlerState createState() => _UrunlerState(category, list, bakeryName);
 }
 
 class _UrunlerState extends State<Urunler> {
-  final String categoryName;
-  DatabaseService sv = DatabaseService();
+  String categoryName;
+  String bakeryName;
   List<Product> productList = [];
+  DatabaseService sv;
+
   void _addNewProduct(String prName, double prAmount) {
     final newProduct =
         Product(name: prName, amount: prAmount, category: categoryName);
@@ -25,7 +27,12 @@ class _UrunlerState extends State<Urunler> {
     });
   }
 
-  _UrunlerState({this.categoryName, this.productList});
+  _UrunlerState(String category, List<Product> list, String name) {
+    categoryName = category;
+    productList = list;
+    bakeryName = name;
+    sv = DatabaseService(name);
+  }
 
   void _startAddNewProduct(BuildContext ctx) {
     showModalBottomSheet(

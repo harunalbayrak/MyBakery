@@ -7,14 +7,16 @@ import 'Payers.dart';
 
 class Markets extends StatefulWidget {
   final List<Market> list;
-  Markets({this.list});
+  final String bakeryName;
+  Markets({this.list, this.bakeryName});
   @override
-  _MarketsState createState() => _MarketsState(marketList: list);
+  _MarketsState createState() => _MarketsState(list, bakeryName);
 }
 
 class _MarketsState extends State<Markets> {
-  DatabaseService sv = DatabaseService();
+  DatabaseService sv;
   List<Market> marketList = [];
+  String bakeryName;
   void _addNewMarket(String prName, double prAmount) {
     final newMarket = Market(name: prName, debt: prAmount);
     setState(() {
@@ -23,7 +25,11 @@ class _MarketsState extends State<Markets> {
     });
   }
 
-  _MarketsState({this.marketList});
+  _MarketsState(List<Market> markets, String bakery) {
+    marketList = markets;
+    bakeryName = bakery;
+    sv = DatabaseService(bakeryName);
+  }
 
   void _startAddNewMarket(BuildContext ctx) {
     showModalBottomSheet(
@@ -51,7 +57,7 @@ class _MarketsState extends State<Markets> {
     Navigator.of(cx).push(
       MaterialPageRoute(
         builder: (_) {
-          return Payers(list: payerList);
+          return Payers(list: payerList, bakeryName: bakeryName);
         },
       ),
     );
