@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_my_bakery/screens/service/service_models/date_data.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/service_model.dart';
 import 'package:flutter_my_bakery/screens/service/service_models/urun_model.dart';
@@ -57,7 +55,6 @@ class Market {
   }
 
   void addEkmek(int amount) {
-    log(amount.toString());
     delivered += amount;
     service.addDelived(amount);
 

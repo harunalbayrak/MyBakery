@@ -58,6 +58,8 @@ class DatabaseService {
   String username = 'aloafofhappiness@gmail.com';
   String password = 'Aloafofhappiness+';
 
+
+
   void addMarket(Market market) {
     marketsReference.child(market.name).set(market.toMap());
   }

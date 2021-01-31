@@ -5,9 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_my_bakery/screens/authenticate/sign_in.dart';
 import 'package:flutter_my_bakery/screens/home/bottom_bar_state.dart';
 import 'package:flutter_my_bakery/screens/service/service_main.dart';
+import 'package:flutter_my_bakery/screens/setup/firstPage.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/tezgahtar.dart';
+import 'package:flutter_my_bakery/services/databaseService.dart';
 
 String role;
+Map bakery;
+
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,11 +41,25 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  DatabaseService service = DatabaseService('bakery');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    service.bakeryReference.once().then((onValue){
+      Map data = onValue.value;
+      bakery = data["bakery"];
+      //print(bakery);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User> snapshot) {
+          //print(length);
           if (snapshot.hasData && snapshot.data != null) {
             Firestore.instance
                 .collection('users')
@@ -48,17 +67,20 @@ class _MainScreenState extends State<MainScreen> {
                 .get()
                 .then((DocumentSnapshot snapshot2) {
               Map x = snapshot2.data();
-              print(x);
+              //print(x);
 
               setState(() {
                 role = x["role"];
               });
             });
 
+
             //print("role:");
             //print(role);
 
-            if (role == "Yönetici" ||
+            if(bakery == null) {
+              return FirstPage();
+            } else if (role == "Yönetici" ||
                 role == "Yonetici" ||
                 role == "yönetici" ||
                 role == "yonetici") {

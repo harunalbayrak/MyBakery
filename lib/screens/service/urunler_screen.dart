@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +28,6 @@ class _UrunScreen extends State<UrunScreen> {
     super.initState();
     productRef = widget.market.marketReference.child('products');
     _ref = productRef.orderByChild('name');
-
-    log(productRef.toString());
   }
 
   void add(String name, double price) {
@@ -39,8 +36,7 @@ class _UrunScreen extends State<UrunScreen> {
 
   void delete() {
     var list = controller.selectedIndexes;
-    log('l: ' + controller.isSelecting.toString());
-    log(_urunList.toString());
+
     list.sort((b, a) =>
         a.compareTo(b)); //reoder from biggest number, so it wont error
     list.forEach((index) {
@@ -52,7 +48,6 @@ class _UrunScreen extends State<UrunScreen> {
   }
 
   void selectAll() {
-    log(controller.listLength.toString());
     setState(() {
       controller.toggleAll();
     });
@@ -167,14 +162,12 @@ class _UrunScreen extends State<UrunScreen> {
               Animation<double> animation, int index) {
             Map product = snapshot.value;
             _urunList.add(product['name']);
-            log(controller.listLength.toString());
+
             return MultiSelectItem(
               isSelecting: controller.isSelecting,
               onSelected: () {
                 setState(() {
-                  log('index: ' + index.toString());
                   select(index);
-                  log(controller.isSelected(index).toString());
                 });
               },
               child: Container(

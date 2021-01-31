@@ -26,49 +26,6 @@ class _MarketDetailState extends State<MarketDetail> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Center(
-            //   child: Container(
-            //     padding: EdgeInsets.all(6),
-            //     child: Column(
-            //       children: [
-            //         SizedBox(
-            //           width: MediaQuery.of(context).size.width / 2 - 20,
-            //           child: Container(
-            //             child: RaisedButton(
-            //               child: Row(
-            //                 mainAxisSize: MainAxisSize.min,
-            //                 children: [
-            //                   Text(
-            //                     currentTime,
-            //                     style: TextStyle(
-            //                         fontFamily: "Poppins", color: Colors.white),
-            //                   ),
-            //                   Icon(
-            //                     Icons.keyboard_arrow_right,
-            //                     color: Colors.white,
-            //                   ),
-            //                 ],
-            //               ),
-            //               color: Colors.amber,
-            //               onPressed: () {
-            //                 DatePicker.showDatePicker(context,
-            //                     showTitleActions: true,
-            //                     minTime: minTime,
-            //                     maxTime: maxTime, onChanged: (date) {
-            //                   print('change $date');
-            //                 }, onConfirm: (date) {
-            //                   print('confirm $date');
-            //                 },
-            //                     currentTime: DateTime.now(),
-            //                     locale: LocaleType.tr);
-            //               },
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             Column(
               children: [
                 Row(
@@ -89,12 +46,12 @@ class _MarketDetailState extends State<MarketDetail> {
                       width: MediaQuery.of(context).size.width * 0.45,
                       height: MediaQuery.of(context).size.height * .2,
                       child: InfoCard(
-                        label: "EKMEK",
-                        info: widget.market.delivered.toString(),
-                        fontSize: 24,
-                        icon: Icon(Icons.bakery_dining),
-                        onTap: () => newPage(context, "ekmek"),
-                      ),
+                          label: "TESLİM",
+                          info: widget.market.delivered.toString(),
+                          fontSize: 24,
+                          icon: Icon(Icons.bakery_dining),
+                          onTap: () => {} //newPage(context, "ekmek"),
+                          ),
                     ),
                   ],
                 ),
@@ -116,7 +73,7 @@ class _MarketDetailState extends State<MarketDetail> {
                       width: MediaQuery.of(context).size.width * 0.45,
                       height: MediaQuery.of(context).size.height * .2,
                       child: InfoCard(
-                        label: "DİĞER",
+                        label: "ÜRÜNLER",
                         fontSize: 24,
                         icon: Icon(Icons.inventory),
                         onTap: () => newPage(context, "urunler"),

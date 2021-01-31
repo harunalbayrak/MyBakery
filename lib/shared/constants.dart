@@ -19,14 +19,14 @@ const textStyle1 = TextStyle(
 const textStyle2 = TextStyle(
     fontFamily: "Poppins",
     color: Colors.white,
-    fontSize: 15,
+    fontSize: 14,
 );
 
 const textStyle3 = TextStyle(
     fontFamily: "Poppins",
     color: Colors.white,
     fontWeight: FontWeight.bold,
-    fontSize: 17
+    fontSize: 15
 );
 
 const textStyle4 = TextStyle(
@@ -37,5 +37,5 @@ const textStyle4 = TextStyle(
 );
 
 TextStyle textStyle(Color color){
-    return TextStyle(fontFamily: "Poppins",fontSize: 18,color: color);
+    return TextStyle(fontFamily: "Poppins",fontSize: 17,color: color);
 }

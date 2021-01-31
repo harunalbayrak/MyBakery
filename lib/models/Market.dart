@@ -7,7 +7,7 @@ class Market {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'debt': debt,
+      'debt': debt.toString(),
     };
   }
 }

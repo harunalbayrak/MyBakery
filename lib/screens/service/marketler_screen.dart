@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +21,6 @@ class _MarketlerState extends State<Marketler> {
   void initState() {
     super.initState();
     _ref = DatabaseService('bakery').marketsReference.orderByChild('name');
-    log(_ref.toString());
   }
 
   @override

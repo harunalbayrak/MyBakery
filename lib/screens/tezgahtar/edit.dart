@@ -150,7 +150,12 @@ class _EditNotePageState extends State<EditNotePage> {
                       AnimatedContainer(
                         margin: EdgeInsets.only(left: 10),
                         duration: Duration(milliseconds: 200),
-                        width: (isNoteNew && isDirtyTitle && isDirtyContent) || (!isNoteNew && (isDirtyContent || isDirtyTitle) && titleController.text.isNotEmpty) ? 120 : 0,
+                        width: (isNoteNew && isDirtyTitle && isDirtyContent) ||
+                                (!isNoteNew &&
+                                    (isDirtyContent || isDirtyTitle) &&
+                                    titleController.text.isNotEmpty)
+                            ? 120
+                            : 0,
                         height: 42,
                         curve: Curves.decelerate,
                         child: RaisedButton.icon(
@@ -406,7 +411,12 @@ class _EditExpensePageState extends State<EditExpensePage> {
                       AnimatedContainer(
                         margin: EdgeInsets.only(left: 20),
                         duration: Duration(milliseconds: 200),
-                        width: (isExpenseNew &&isDirtyTitle && isDirtyContent) || (!isExpenseNew && (isDirtyTitle || isDirtyContent)) ? 150 : 0,
+                        width:
+                            (isExpenseNew && isDirtyTitle && isDirtyContent) ||
+                                    (!isExpenseNew &&
+                                        (isDirtyTitle || isDirtyContent))
+                                ? 150
+                                : 0,
                         height: 42,
                         curve: Curves.decelerate,
                         child: RaisedButton.icon(
@@ -544,7 +554,8 @@ class EditVeresiyePage extends StatefulWidget {
 }
 
 class _EditVeresiyePageState extends State<EditVeresiyePage> {
-  bool isDirty = false;
+  bool titleIsDirty = false;
+  bool contentIsDirty = false;
   bool isVeresiyeNew = true;
   FocusNode titleFocus = FocusNode();
   FocusNode contentFocus = FocusNode();
@@ -657,7 +668,7 @@ class _EditVeresiyePageState extends State<EditVeresiyePage> {
                       AnimatedContainer(
                         margin: EdgeInsets.only(left: 10),
                         duration: Duration(milliseconds: 200),
-                        width: isDirty ? 130 : 0,
+                        width: (titleIsDirty && contentIsDirty) ? 130 : 0,
                         height: 42,
                         curve: Curves.decelerate,
                         child: RaisedButton.icon(
@@ -706,7 +717,8 @@ class _EditVeresiyePageState extends State<EditVeresiyePage> {
     }
     setState(() {
       isVeresiyeNew = false;
-      isDirty = false;
+      contentIsDirty = false;
+      titleIsDirty = false;
     });
     widget.triggerRefetch();
     titleFocus.unfocus();
@@ -716,22 +728,22 @@ class _EditVeresiyePageState extends State<EditVeresiyePage> {
   void markTitleAsDirty(String title) {
     if (fieldTest.veresiyeTitleValidator(title) == null)
       setState(() {
-        isDirty = true;
+        titleIsDirty = true;
       });
     else
       setState(() {
-        isDirty = false;
+        titleIsDirty = false;
       });
   }
 
   void markContentAsDirty(String content) {
     if (fieldTest.veresiyeContentValidator(content) == null)
       setState(() {
-        isDirty = true;
+        contentIsDirty = true;
       });
     else
       setState(() {
-        isDirty = false;
+        contentIsDirty = false;
       });
   }
 
@@ -749,7 +761,7 @@ class _EditVeresiyePageState extends State<EditVeresiyePage> {
               content: Text('Bu veresiye hesabı kalıcı olarak silinecektir.'),
               actions: <Widget>[
                 FlatButton(
-                  onPressed: () {  },
+                  onPressed: () {},
                   child: Text('Sil',
                       style: prefix0.TextStyle(
                           color: Colors.red.shade300,
