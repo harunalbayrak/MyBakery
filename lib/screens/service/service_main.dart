@@ -19,7 +19,7 @@ class Service extends StatefulWidget {
 
 class _ServiceState extends State<Service> {
   bool loading = false;
-
+  Future<String> f;
   ServiceModel _service = ServiceModel();
 
   StreamSubscription<Event> updates;
@@ -57,14 +57,15 @@ class _ServiceState extends State<Service> {
         _service.updateByKey('debt', data.snapshot.value);
       }
     });
+    f = _service.local();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<double>(
-        future: _service.local(), // async work
+      body: FutureBuilder<String>(
+        future: f, // async work
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
