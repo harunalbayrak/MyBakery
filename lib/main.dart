@@ -8,6 +8,7 @@ import 'package:flutter_my_bakery/screens/service/service_main.dart';
 import 'package:flutter_my_bakery/screens/setup/firstPage.dart';
 import 'package:flutter_my_bakery/screens/tezgahtar/tezgahtar.dart';
 import 'package:flutter_my_bakery/services/databaseService.dart';
+import 'package:flutter_my_bakery/shared/loading.dart';
 
 String role;
 Map bakery;
@@ -47,15 +48,18 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    service.bakeryReference.once().then((onValue){
-      Map data = onValue.value;
-      bakery = data["bakery"];
-      ////print(bakery);
-    });
+
   }
 
   @override
   Widget build(BuildContext context) {
+    service.bakeryReference.onValue.listen((event){
+      Map value = event.snapshot.value;
+      bakery = value;
+      //print(value);
+    });
+
+
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User> snapshot) {
@@ -74,24 +78,36 @@ class _MainScreenState extends State<MainScreen> {
               });
             });
 
-
-            ////print("role:");
-            ////print(role);
-
-            if(bakery == null) {
-              return FirstPage();
-            } else if (role == "Yönetici" ||
+            if(role == "Yönetici" ||
                 role == "Yonetici" ||
                 role == "yönetici" ||
-                role == "yonetici") {
-              return BottomBarState();
+                role == "yonetici"){
+              if(bakery == null){
+                return FirstPage();
+              } else if(bakery != null){
+                return BottomBarState();
+              } else{
+                return Loading();
+              }
             } else if (role == "Tezgahtar" || role == "tezgahtar") {
-              return Tezgahtar();
-            } else if (role == "Şoför" ||
+              if(bakery == null){
+                return FirstPage();
+              } else if(bakery != null){
+                return Tezgahtar();
+              } else{
+                return Loading();
+              }
+            } else if(role == "Şoför" ||
                 role == "Soför" ||
                 role == "Şofor" ||
-                role == "Sofor") {
-              return Service();
+                role == "Sofor"){
+              if(bakery == null){
+                return FirstPage();
+              } else if(bakery != null){
+                return Service();
+              } else{
+                return Loading();
+              }
             }
           }
           return SignIn();
