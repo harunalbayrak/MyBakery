@@ -17,6 +17,7 @@ class DatabaseService {
   var categoryReference;
   var bakeryReference;
   var dailyDataReference;
+
   DatabaseService(String bakeryName) {
     bakeryRef = FirebaseDatabase.instance
         .reference()
@@ -58,9 +59,22 @@ class DatabaseService {
   String username = 'aloafofhappiness@gmail.com';
   String password = 'Aloafofhappiness+';
 
+  void addMarket(Market market) async {
+    DataSnapshot snap = await FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child('bakery')
+        .once();
+    var borc =
+        snap.value['debt'] != null ? double.parse(snap.value['debt']) : 0.0;
 
+    borc = borc + market.debt;
+    FirebaseDatabase.instance
+        .reference()
+        .child('bakeries')
+        .child('bakery')
+        .update({"debt": borc.toString()});
 
-  void addMarket(Market market) {
     marketsReference.child(market.name).set(market.toMap());
   }
 

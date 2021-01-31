@@ -4,9 +4,8 @@ class UrunCard extends StatefulWidget {
   final Color color;
   final String name;
   final double price;
-  Function editFunction;
-  UrunCard(
-      {Key key, this.name, this.price = 0, this.color, this.editFunction}) {}
+  final Function editFunction;
+  UrunCard({Key key, this.name, this.price = 0, this.color, this.editFunction});
 
   @override
   _UrunCardState createState() => _UrunCardState();
