@@ -9,7 +9,7 @@ class AuthService {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       return "Signed in";
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }
@@ -22,7 +22,7 @@ class AuthService {
       x.user.uid;
       return x.user.uid;
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }
@@ -32,7 +32,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }

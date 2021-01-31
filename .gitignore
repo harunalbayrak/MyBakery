@@ -122,6 +122,7 @@ pubspec.lock
 !/dev/ci/**/Gemfile.lock
 
 linux/flutter/generated_plugin_registrant.cc
-.gitignore
+
 linux/flutter/generated_plugins.cmake
 linux/flutter/generated_plugin_registrant.h
+

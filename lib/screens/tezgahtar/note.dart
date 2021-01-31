@@ -39,7 +39,7 @@ class _NoteState extends State<Note> {
   }
 
   setNotesFromDB() async {
-    print("Entered setNotes");
+    //print("Entered setNotes");
     notesList.clear();
     service.dailyDataReference
         .child(formatter.format(DateTime.now()))
@@ -49,10 +49,6 @@ class _NoteState extends State<Note> {
       Map<dynamic, dynamic> map = snapshot.value;
       if (map != null) {
         map.forEach((key, values) {
-          print(values);
-          print("data: " +
-              values["title"] +
-              "--------------------------------------");
           setState(() {
             // boolVal = values["isImportant"] == 1 ? true : false;
             notesList.add(NotesModel.withID(values["title"], values["content"],
@@ -248,7 +244,7 @@ class _NoteState extends State<Note> {
             onTapAction: openNoteToRead,
           ));
       });
-      print("is there any error---------");
+      //print("is there any error---------");
       return noteComponentsList;
     }
     if (isFlagOn) {
@@ -292,7 +288,7 @@ class _NoteState extends State<Note> {
 
   void refetchNotesFromDB() async {
     await setNotesFromDB();
-    print("Refetched notes");
+    //print("Refetched notes");
   }
 
   openNoteToRead(NotesModel noteData) async {

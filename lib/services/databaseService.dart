@@ -95,7 +95,7 @@ class DatabaseService {
         var check = await auth.registerWithEmailAndPassword(
             value['mail'], value['passwd']);
 
-        print(check);
+        //print(check);
 
         if (check != null) {
           await Firestore.instance
@@ -113,11 +113,11 @@ class DatabaseService {
 
           try {
             final sendReport = await send(message, smtpServer);
-            print('Message sent: ' + sendReport.toString());
+            //print('Message sent: ' + sendReport.toString());
           } on MailerException catch (e) {
-            print('Message not sent.');
+            //print('Message not sent.');
             for (var p in e.problems) {
-              print('Problem: ${p.code}: ${p.msg}');
+              //print('Problem: ${p.code}: ${p.msg}');
             }
           }
         }

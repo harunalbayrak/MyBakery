@@ -100,7 +100,7 @@ class _ProductsState extends State<Products> {
                                   ProductsIn(category: item[index]["key"])),
                         );
                       } on Exception catch (_) {
-                        print("asd");
+                        //print("asd");
                       }
                     },
                     leading: ConstrainedBox(

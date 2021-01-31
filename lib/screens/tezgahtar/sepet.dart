@@ -19,9 +19,9 @@ class Sepet extends StatefulWidget {
 
 class _SepetState extends State<Sepet> {
   double sumPrice() {
-    print("QQQQQQQQQQQQQQQQQQQQQQQQQQQQ: " + widget.price.length.toString());
+    //print("QQQQQQQQQQQQQQQQQQQQQQQQQQQQ: " + widget.price.length.toString());
     if (widget.price.length == 0) {
-      // print("0 dönmüş olmalı\nwwwwwwwwwwwwwwwwwwwwwwwwwwww: " + (price == null).toString());
+      // //print("0 dönmüş olmalı\nwwwwwwwwwwwwwwwwwwwwwwwwwwww: " + (price == null).toString());
       return 0;
     }
     double sum = 0;
@@ -361,12 +361,12 @@ class _SepetState extends State<Sepet> {
     Map<dynamic, dynamic> res = {};
     List<Map<dynamic, dynamic>> tx = List();
     for (int i = 0; i < product.length; i++) {
-      // print(product[i].toString());
-      // print(price[i] * 1.0 is double);
+      // //print(product[i].toString());
+      // //print(price[i] * 1.0 is double);
       ItemHolder ele =
           ItemHolder(product[i].toString(), price[i] * 1.0, piece[i]);
       tx.insert(i, ele.toMap());
-      // print(tx);
+      // //print(tx);
     }
 
     Alert(
@@ -380,7 +380,7 @@ class _SepetState extends State<Sepet> {
             ),
             RaisedButton(
               onPressed: () {
-                // print(res);
+                // //print(res);
                 res.addAll({
                   'Ürünler': tx,
                   'Ödeme Yöntemi': 'Kredi Kartı',

@@ -41,7 +41,7 @@ class _EkmekState extends State<Ekmek> {
 
   setEkmekFromDB() async {
     ekmekList.clear();
-    print("Entered setEkmek");
+    ////print("Entered setEkmek");
     service.dailyDataReference
         .child(formatter.format(DateTime.now()))
         .child("producedBreads")
@@ -50,10 +50,6 @@ class _EkmekState extends State<Ekmek> {
       Map<dynamic, dynamic> map = snapshot.value;
       if (map != null) {
         map.forEach((key, values) {
-          print(values);
-          print("data: " +
-              values["title"] +
-              "--------------------------------------");
           setState(() {
             ekmekList.add(EkmekModel.withID(
                 values["title"], values["time"], values["_id"]));
