@@ -77,27 +77,80 @@ class _Card extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(radius)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            info != null
-                ? Text(
-                    info,
-                    style: TextStyle(
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.bold,
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      alignment: Alignment.center,
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: color,
+        boxShadow: shadow != false
+            ? [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 1,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                ),
+              ]
+            : null,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              label == null
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.all(margin),
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            label,
+                            style: TextStyle(
+                              fontSize: fontSize,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+              info == null
+                  ? SizedBox.shrink()
+                  : Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.all(margin),
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: FittedBox(
+                            child: Text(
+                              info,
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+            ],
+          ),
+          icon == null
+              ? SizedBox.shrink()
+              : Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: icon,
                     ),
                   )
                 : SizedBox.shrink(),

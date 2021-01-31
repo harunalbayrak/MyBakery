@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_my_bakery/services/databaseService.dart';
 
@@ -33,9 +31,7 @@ class ServiceModel {
     }
   }
 
-  Future<String> local() async {
-    String d;
-
+  Future<double> local() async {
     DataSnapshot snapshot = await DatabaseService('bakery').bakeryRef.once();
     var day = snapshot.value['dailyData'][DateData.date];
     if (day != null) {
@@ -45,13 +41,12 @@ class ServiceModel {
           snapshot.value['taken'] != null ? double.parse(day['taken']) : 0.0;
     }
     if (snapshot.value != null) {
-      debt = double.parse(snapshot.value['debt']);
-      log(debt.toString());
+      debt = snapshot.value['debt'] != null
+          ? double.parse(snapshot.value['debt'])
+          : 0.0;
+    } else {}
 
-      d = 'd';
-    }
-
-    return d;
+    return debt;
   }
 
   addBayat(int amount) {

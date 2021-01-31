@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +68,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   @override
   Widget build(BuildContext context) {
-    log('test4');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
@@ -106,7 +103,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   Future<void> _displayTextInputDialog(
       BuildContext context, Map product) async {
-    log(product.toString());
     TextEditingController _textFieldController = new TextEditingController();
     final _formKey = GlobalKey<FormState>();
     return showDialog(
@@ -139,8 +135,6 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                   child: Text("ekle"),
                   color: Theme.of(context).accentColor,
                   onPressed: () {
-                    log(_textFieldController.text);
-
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
 
@@ -151,9 +145,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                                   ? int.parse(product['amount'])
                                   : 0),
                           product['price'].toDouble());
-                      log('burada 1');
 
-                      log('burada');
                       _textFieldController.clear();
                       Navigator.pop(context); // Close the add todo screen
                     }

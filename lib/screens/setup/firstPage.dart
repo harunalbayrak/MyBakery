@@ -1,5 +1,7 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
+
 import 'categories.dart';
 
 class FirstPage extends StatefulWidget {
@@ -113,5 +115,3 @@ class _FirstPageState extends State<FirstPage> {
     );
   }
 }
-
-
