@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -42,6 +43,8 @@ class _ServiceState extends State<Service> {
   @override
   initState() {
     _dayRef = _service.dayReference.limitToLast(50);
+
+    log(_dayRef.toString());
     var _debtRef = DatabaseService('bakery').bakeryRef.child('child');
     updates = _dayRef.onChildChanged.listen((data) {
       if (data != null) {
@@ -64,7 +67,7 @@ class _ServiceState extends State<Service> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator.adaptive());
           default:
             if (snapshot.hasError)
               return Center(
