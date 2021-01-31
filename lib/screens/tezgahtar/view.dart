@@ -137,7 +137,7 @@ class _ViewNotePageState extends State<ViewNotePage> {
   }
 
   void handleSave() async {
-    print("save state: " + widget.currentNote.toMap().toString());
+    //print("save state: " + widget.currentNote.toMap().toString());
     service.updateNote(widget.currentNote.id, widget.currentNote.toMap());
     widget.triggerRefetch();
   }
@@ -327,10 +327,8 @@ class _ViewExpensePageState extends State<ViewExpensePage> {
   }
 
   void handleSave() async {
-    print(
-        "handleSave : -----------------------------------------------------------------------------------");
     var temp = widget.currentExpense.id;
-    print("uid: " + temp + "-----------------------");
+    //print("uid: " + temp + "-----------------------");
     service.updateExpense(
         widget.currentExpense.id, widget.currentExpense.toMap());
     widget.triggerRefetch();

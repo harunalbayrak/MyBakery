@@ -25,7 +25,7 @@ class _OdemeKategoriState extends State<OdemeKategori> {
   DatabaseService service = DatabaseService('bakery');
 
   double sumPrice() {
-    print("wewewewewewewewewe:");
+    //print("wewewewewewewewewe:");
     if (price.length == 0) return 0.0;
     double sum = 0;
     for (int i = 0; i < price.length; ++i) {

@@ -22,27 +22,10 @@ class _HomeState extends State<Home> {
   int toplamCikanEkmek = 0;
   int dagitimdaSatilanEkmek = 0;
   int toplamKalanEkmek = 0;
-  int vitrindenToplamSatisTutari = 0;
-  int krediKartiSatisTutari = 0;
-  int kasadaOlmasiGerekenTutar = 0;
+  double vitrindenToplamSatisTutari = 0;
+  double krediKartiSatisTutari = 0;
+  double kasadaOlmasiGerekenTutar = 0;
   int _kalan = 0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      getBreadData();
-    });
-  }
-
-  void getBreadData(){
-    String currentTime = dateFormat1.format(DateTime.now());
-    int sum = 0;
-
-
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +36,18 @@ class _HomeState extends State<Home> {
       var snapshot = event.snapshot;
       Map value = snapshot.value;
 
-      value.forEach((key, value) {
-        var xx = value["title"];
-        //print('Value is $xx');
-        sum += int.parse(xx);
-      });
+      try {
+        value.forEach((key, value) {
+          var xx = value["title"];
+          ////print('Value is $xx');
+          sum += int.parse(xx);
+        });
+      } catch(e) {
+        sum = 0;
+      }
       setState(() {
         toplamCikanEkmek = sum;
-        //print(toplamCikanEkmek);
+        ////print(toplamCikanEkmek);
       });
     });
 
@@ -68,28 +55,36 @@ class _HomeState extends State<Home> {
       var snapshot = event.snapshot;
       Map value = snapshot.value;
 
-      dagitimdaSatilanEkmek = int.parse(value["delivered"]);
-      _kalan = toplamCikanEkmek - dagitimdaSatilanEkmek;
+      try {
+        dagitimdaSatilanEkmek = int.parse(value["delivered"]);
+        _kalan = toplamCikanEkmek - dagitimdaSatilanEkmek;
+      } catch(e){
+        dagitimdaSatilanEkmek = 0;
+        _kalan = 0;
+      }
     });
 
     service.bakeryRef.child("dailyData").child(currentTime).child("tx").onValue.listen((event){
-      int sumNakit = 0;
-      int sumKrediKarti = 0;
+      double sumNakit = 0;
+      double sumKrediKarti = 0;
       Map x = event.snapshot.value;
 
-      x.forEach((key,value){
-        //print(value["Toplam Alınan Ücret"]);
-        //print(value["Ödeme Yöntemi"]);
-
-        if(value["Ödeme Yöntemi"] == "Nakit Ödeme"){
-          sumNakit += value["Toplam Alınan Ücret"];
-        } else if(value["Ödeme Yöntemi"] == "Kredi Kartı"){
-          sumKrediKarti += value["Toplam Alınan Ücret"];
-        }
-      });
-      vitrindenToplamSatisTutari = sumNakit;
-      krediKartiSatisTutari = sumKrediKarti;
-      kasadaOlmasiGerekenTutar = sumNakit + (_kalan * 1.75).toInt();
+      try {
+        x.forEach((key, value) {
+          if (value["Ödeme Yöntemi"] == "Nakit Ödeme") {
+            sumNakit += value["Toplam Alınan Ücret"];
+          } else if (value["Ödeme Yöntemi"] == "Kredi Kartı") {
+            sumKrediKarti += value["Toplam Alınan Ücret"];
+          }
+        });
+        vitrindenToplamSatisTutari = sumNakit;
+        krediKartiSatisTutari = sumKrediKarti;
+        kasadaOlmasiGerekenTutar = sumNakit + (_kalan * 1.75);
+      } catch(e){
+        vitrindenToplamSatisTutari = 0;
+        krediKartiSatisTutari = 0;
+        kasadaOlmasiGerekenTutar = 0;
+      }
     });
 
     double iconSize = MediaQuery.of(context).size.width / 6 - 5;
@@ -220,7 +215,7 @@ Widget myBox(BuildContext context, Icon icon, String string, Widget function) {
   );
 }
 
-Widget myBox2(BuildContext context, int toplamCikanEkmek, int dagitimdaSatilanEkmek, int vitrindenToplamSatisTutari, int krediKartiSatisTutari, int kasadaOlmasiGerekenTutar) {
+Widget myBox2(BuildContext context, int toplamCikanEkmek, int dagitimdaSatilanEkmek, double vitrindenToplamSatisTutari, double krediKartiSatisTutari, double kasadaOlmasiGerekenTutar) {
   double size1 = MediaQuery.of(context).size.height / 30;
   double size2 = MediaQuery.of(context).size.height / 40;
 
@@ -241,7 +236,7 @@ Widget myBox2(BuildContext context, int toplamCikanEkmek, int dagitimdaSatilanEk
               height: size1 / 2,
             ),
             Text(
-              "\₺ " + kasadaOlmasiGerekenTutar.toString(),
+              "\₺ " + kasadaOlmasiGerekenTutar.toInt().toString(),
               style: textStyle4,
             ),
             Text(

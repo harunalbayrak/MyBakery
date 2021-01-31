@@ -79,27 +79,6 @@ class _RegisterState extends State<Register> {
                     SizedBox(
                       height: 20.0,
                     ),
-                    RaisedButton(
-                        color: Colors.pink[400],
-                        child: Text(
-                          "Register",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () => print("register")
-                        // async {
-                        //   if (_formKey.currentState.validate()) {
-                        //     setState(() => loading = true);
-                        //     dynamic result = await _auth
-                        //         .registerWithEmailAndPassword(email, password);
-                        //     if (result == null) {
-                        //       setState(() {
-                        //         loading = false;
-                        //         return error = "Please supply a valid email";
-                        //       });
-                        //     }
-                        //   }
-                        // },
-                        ),
                     SizedBox(height: 20.0),
                     Text(
                       error,

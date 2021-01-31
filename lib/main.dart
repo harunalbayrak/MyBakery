@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
     service.bakeryReference.once().then((onValue){
       Map data = onValue.value;
       bakery = data["bakery"];
-      //print(bakery);
+      ////print(bakery);
     });
   }
 
@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User> snapshot) {
-          //print(length);
+          ////print(length);
           if (snapshot.hasData && snapshot.data != null) {
             Firestore.instance
                 .collection('users')
@@ -67,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
                 .get()
                 .then((DocumentSnapshot snapshot2) {
               Map x = snapshot2.data();
-              //print(x);
+              ////print(x);
 
               setState(() {
                 role = x["role"];
@@ -75,8 +75,8 @@ class _MainScreenState extends State<MainScreen> {
             });
 
 
-            //print("role:");
-            //print(role);
+            ////print("role:");
+            ////print(role);
 
             if(bakery == null) {
               return FirstPage();
@@ -105,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
         .get()
         .then((DocumentSnapshot snapshot) {
       Map x = snapshot.data();
-      print(x["role"]);
+      //print(x["role"]);
 
       return x["role"];
     });
