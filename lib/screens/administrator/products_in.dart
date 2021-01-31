@@ -53,9 +53,9 @@ class _ProductsInState extends State<ProductsIn> {
               if (snapshot.hasData) {
                 data = snapshot.data.snapshot.value;
 
-                print(data.length);
-                print(data.values.first);
-                print(widget.category.toString());
+                //print(data.length);
+                //print(data.values.first);
+                //print(widget.category.toString());
 
                 if (data == null ||
                     (data.length == 1 &&

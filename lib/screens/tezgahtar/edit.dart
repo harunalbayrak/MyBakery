@@ -44,7 +44,7 @@ class _EditNotePageState extends State<EditNotePage> {
           date: DateTime.now(),
           isImportant: false);
       isNoteNew = true;
-      print(currentNote.id);
+      //print(currentNote.id);
     } else {
       currentNote = widget.existingNote;
       isNoteNew = false;
@@ -185,11 +185,11 @@ class _EditNotePageState extends State<EditNotePage> {
     setState(() {
       currentNote.title = titleController.text;
       currentNote.content = contentController.text;
-      print('Hey there ${currentNote.content}');
+      //print('Hey there ${currentNote.content}');
     });
     if (isNoteNew) {
       var latestNote = currentNote;
-      print("uid: " + currentNote.id);
+      //print("uid: " + currentNote.id);
       service.addNote(currentNote.id, currentNote.toMap());
       setState(() {
         currentNote = latestNote;
@@ -447,7 +447,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
     setState(() {
       currentExpense.title = titleController.text;
       currentExpense.content = contentController.text;
-      print('Hey there ${currentExpense.content}');
+      //print('Hey there ${currentExpense.content}');
     });
     if (isExpenseNew) {
       var latestNote = currentExpense;
@@ -701,7 +701,7 @@ class _EditVeresiyePageState extends State<EditVeresiyePage> {
     setState(() {
       currentVeresiye.title = titleController.text;
       currentVeresiye.content = contentController.text;
-      print('Hey there ${currentVeresiye.content}');
+      //print('Hey there ${currentVeresiye.content}');
     });
     if (isVeresiyeNew) {
       service.addVeresiye(currentVeresiye.title, currentVeresiye.toMap());

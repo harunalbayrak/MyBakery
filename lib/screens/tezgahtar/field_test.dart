@@ -1,6 +1,6 @@
 class fieldTest {
   static String veresiyeContentValidator(String text) {
-    print("inside validator");
+    //print("inside validator");
     if (text.isEmpty) return "Miktar kısmı boş bırakılamaz!";
 
     Pattern pattern = r"^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$";
@@ -13,13 +13,13 @@ class fieldTest {
   }
 
   static String expenseTitleValidator(String text) {
-    print("inside validator");
+    //print("inside validator");
     if (text.isEmpty) return "Gider kısmı boş bırakılamaz!";
 
     Pattern pattern = r"^[1-9]?([1-9]\d*)";
     RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(text)) {
-      print("not a number");
+      //print("not a number");
       return "Gider bilgisi numerik olmalıdır!";
     }
   }

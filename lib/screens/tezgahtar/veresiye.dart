@@ -38,16 +38,12 @@ class _VeresiyeState extends State<Veresiye> {
   }
 
   setVeresiyeFromDB() async {
-    print("Entered setVeresiye");
+    //print("Entered setVeresiye");
     veresiyeList.clear();
     service.veresiyelerDataReference.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> map = snapshot.value;
       if (map != null) {
         map.forEach((key, values) {
-          print(values);
-          print("data: " +
-              values["title"] +
-              "--------------------------------------");
           setState(() {
             veresiyeList.add(VeresiyeModel.withID(
               values["title"],
@@ -230,9 +226,9 @@ class _VeresiyeState extends State<Veresiye> {
             ),
             onPressed: () {
               if (_key.currentState.validate()) {
-                print("inside ekle");
+                //print("inside ekle");
                 setState(() {
-                  print("inside setstate");
+                  //print("inside setstate");
                   if (double.parse(controller.value.text) > 0) {
                     veresiye.content = ((double.parse(veresiye.content)) +
                             (double.parse(controller.value.text)))
@@ -323,7 +319,7 @@ class _VeresiyeState extends State<Veresiye> {
 
   void refetchVeresiyeFromDB() async {
     await setVeresiyeFromDB();
-    print("Refetched veresiye");
+    //print("Refetched veresiye");
   }
 
   openVeresiyeToRead(VeresiyeModel veresiyeData) async {
