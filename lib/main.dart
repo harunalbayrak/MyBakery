@@ -76,7 +76,9 @@ class _MainScreenState extends State<MainScreen> {
               setState(() {
                 role = x["role"];
               });
+              print(role);
             });
+
 
             if(role == "Yönetici" ||
                 role == "Yonetici" ||
@@ -86,16 +88,12 @@ class _MainScreenState extends State<MainScreen> {
                 return FirstPage();
               } else if(bakery != null){
                 return BottomBarState();
-              } else{
-                return Loading();
               }
             } else if (role == "Tezgahtar" || role == "tezgahtar") {
               if(bakery == null){
                 return FirstPage();
               } else if(bakery != null){
                 return Tezgahtar();
-              } else{
-                return Loading();
               }
             } else if(role == "Şoför" ||
                 role == "Soför" ||
@@ -105,8 +103,6 @@ class _MainScreenState extends State<MainScreen> {
                 return FirstPage();
               } else if(bakery != null){
                 return Service();
-              } else{
-                return Loading();
               }
             }
           }
