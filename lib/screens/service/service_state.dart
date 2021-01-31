@@ -4,7 +4,6 @@ import 'package:flutter_my_bakery/screens/service/service_main.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   runApp(MyApp());
 }
 
