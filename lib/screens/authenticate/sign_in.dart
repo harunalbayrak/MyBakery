@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_my_bakery/main.dart';
 import 'package:flutter_my_bakery/services/auth.dart';
 import 'package:flutter_my_bakery/shared/constants.dart';
 import 'package:flutter_my_bakery/shared/loading.dart';
@@ -94,6 +95,10 @@ class _SignInState extends State<SignIn> {
                           return error = "Could not sign in with those credentials";
                         });
                       }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                      );
                     }
                   },
                 ),
